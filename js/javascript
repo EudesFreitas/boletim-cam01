@@ -1,0 +1,310 @@
+const tbody = document.getElementById("tableBody");
+
+const headerFields = [
+  "filme", "data", "foto", "produtora",
+  "iso", "wb", "fps", "shutter", "resolucao", "card"
+];
+
+const savedHeader = JSON.parse(localStorage.getItem("headerBoletim")) || {};
+
+headerFields.forEach(id => {
+  if (savedHeader[id]) {
+    document.getElementById(id).textContent = savedHeader[id];
+  }
+});
+if (!savedHeader.data) {
+  const hoje = new Date().toLocaleDateString("pt-BR");
+  document.getElementById("data").textContent = hoje;
+}
+
+// carregar dados salvos
+const savedData = JSON.parse(localStorage.getItem("boletim")) || [];
+
+// função para criar linha
+function createRow(data = []) {
+  const tr = document.createElement("tr");
+
+  for (let i = 0; i < 9; i++) {
+    const td = document.createElement("td");
+
+    // ⭐ STATUS (primeira coluna)
+    if (i === 0) {
+      td.innerHTML = `
+        <div class="buttons">
+          <button onclick="mark(this, 'good')">✅</button>
+          <button onclick="mark(this, 'bad')">❌</button>
+          <button onclick="mark(this, 'best')">⭐</button>
+        </div>
+      `;
+    }
+
+    // TAKE (índice 4)
+    else if (i === 4) {
+      td.contentEditable = true;
+      td.textContent = data[i] || "";
+
+      td.addEventListener("input", saveData);
+      td.addEventListener("keydown", e => handleEnter(e, td, tr));
+    }
+
+    // 📝 OBS (índice 8)
+else if (i === 8) {
+  const text = data[i] || "";
+
+  // guarda o texto real
+  td.dataset.obs = text;
+
+  // mostra só o ícone
+  td.textContent = text ? "📝" : "";
+
+  if (text.trim() !== "") {
+    td.classList.add("obs-filled");
+  }
+
+  td.addEventListener("click", () => openModal(td));
+  
+  td.addEventListener("touchstart", () => {
+  if (td.dataset.obs) {
+    openModal(td);
+  }
+});
+
+  // tooltip 👇
+  td.addEventListener("mouseenter", (e) => {
+  showTooltip(e, td.dataset.obs);
+});
+
+td.addEventListener("mousemove", moveTooltip);
+
+td.addEventListener("mouseleave", hideTooltip);
+}
+
+    // outras colunas
+    else {
+      td.contentEditable = true;
+      td.textContent = data[i] || "";
+
+      td.addEventListener("input", saveData);
+      td.addEventListener("keydown", e => handleEnter(e, td, tr));
+    }
+
+    tr.appendChild(td);
+  }
+
+  return tr;
+}
+
+// função de navegação
+function moveToNextCell(td, tr) {
+  let next = td.nextElementSibling;
+
+  if (next) {
+    focusCell(next);
+  } else {
+    let nextRow = tr.nextElementSibling;
+
+    if (!nextRow) {
+      nextRow = createRow();
+      tbody.appendChild(nextRow);
+    }
+
+    focusCell(nextRow.firstChild);
+  }
+}
+
+// focar corretamente (inclusive na coluna TAKE)
+function focusCell(td) {
+  const input = td.querySelector(".take-input");
+  if (input) {
+    input.focus();
+  } else {
+    td.focus();
+  }
+}
+
+// salvar dados
+function saveData() {
+  const rows = [];
+
+  document.querySelectorAll("#tableBody tr").forEach(tr => {
+    const cells = [];
+
+    tr.querySelectorAll("td").forEach((td, index) => {
+      if (index === 8) {
+        cells.push(td.dataset.obs || "");
+      } else if (index === 0) {
+        cells.push("");
+      } else {
+        cells.push(td.textContent);
+      }
+    });
+
+    rows.push({
+      data: cells,
+      status: tr.className
+    });
+  });
+
+  localStorage.setItem("boletim", JSON.stringify(rows));
+}
+
+// carregar tabela
+if (savedData.length) {
+  savedData.forEach(row => {
+    const tr = createRow(row.data);
+    tr.className = row.status;
+    tbody.appendChild(tr);
+  });
+} else {
+  for (let i = 0; i < 15; i++) {
+    tbody.appendChild(createRow());
+  }
+}
+
+// marcar take
+function mark(btn, type) {
+  const row = btn.closest("tr");
+
+  row.classList.remove("good", "bad", "best");
+  row.classList.add(type);
+
+  saveData();
+}
+
+function handleEnter(e, td, tr) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    moveToNextCell(td, tr);
+  }
+}
+
+// salvar topo
+headerFields.forEach(id => {
+  const el = document.getElementById(id);
+
+  el.addEventListener("input", () => {
+    const headerData = {};
+
+    headerFields.forEach(field => {
+      headerData[field] = document.getElementById(field).textContent;
+    });
+
+    localStorage.setItem("headerBoletim", JSON.stringify(headerData));
+  });
+});
+
+let currentCell = null;
+
+function openModal(td) {
+  currentCell = td;
+
+  const modal = document.getElementById("modal");
+  const textarea = document.getElementById("modalText");
+
+  // 👉 pega do dataset, não do textContent
+  textarea.value = td.dataset.obs || "";
+
+  modal.style.display = "flex";
+  textarea.focus();
+}
+
+function closeModal() {
+  const modal = document.getElementById("modal");
+  const textarea = document.getElementById("modalText");
+
+  if (currentCell) {
+    const value = textarea.value;
+
+    // 👉 salva no dataset
+    currentCell.dataset.obs = value;
+
+    // 👉 mostra só o ícone
+    currentCell.textContent = value ? "📝" : "";
+
+    if (value.trim() !== "") {
+      currentCell.classList.add("obs-filled");
+    } else {
+      currentCell.classList.remove("obs-filled");
+    }
+
+    saveData();
+  }
+
+  modal.style.display = "none";
+}
+
+const tooltip = document.getElementById("tooltip");
+
+function showTooltip(e, text) {
+  if (!text) return;
+
+  tooltip.textContent = text;
+  tooltip.style.display = "block";
+
+  tooltip.style.left = e.pageX + 10 + "px";
+  tooltip.style.top = e.pageY + 10 + "px";
+}
+
+function moveTooltip(e) {
+  tooltip.style.left = e.pageX + 10 + "px";
+  tooltip.style.top = e.pageY + 10 + "px";
+}
+
+function hideTooltip() {
+  tooltip.style.display = "none";
+}
+
+const toggleBtn = document.getElementById("toggleHeader");
+const headerContainer = document.getElementById("headerContainer");
+
+// carregar estado salvo
+const isHidden = localStorage.getItem("headerHidden") === "true";
+
+if (isHidden) {
+  headerContainer.style.display = "none";
+}
+
+toggleBtn.addEventListener("click", () => {
+  if (headerContainer.style.display === "none") {
+    headerContainer.style.display = "block";
+    localStorage.setItem("headerHidden", "false");
+  } else {
+    headerContainer.style.display = "none";
+    localStorage.setItem("headerHidden", "true");
+  }
+});
+
+
+const modal = document.getElementById("modal");
+
+modal.addEventListener("click", function (e) {
+  // se clicar no fundo (fora da caixa)
+  if (e.target === modal) {
+    closeModal();
+  }
+});
+
+// Tema escuro
+const themeBtn = document.getElementById("toggleTheme");
+const html = document.documentElement;
+
+// carregar tema salvo
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  html.setAttribute("data-theme", "dark");
+  themeBtn.textContent = "☀️";
+}
+
+// alternar tema
+themeBtn.addEventListener("click", () => {
+  if (html.getAttribute("data-theme") === "dark") {
+    html.removeAttribute("data-theme");
+    themeBtn.textContent = "🌙";
+    localStorage.setItem("theme", "light");
+  } else {
+    html.setAttribute("data-theme", "dark");
+    themeBtn.textContent = "☀️";
+    localStorage.setItem("theme", "dark");
+  }
+});
