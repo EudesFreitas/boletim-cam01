@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boletim de Câmera</title>
-<link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="./css/responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/responsive.css">
 
 </head>
 
@@ -46,6 +46,36 @@
 </div>
 </div>
 <div class="table-container">
+  <!-- Barra de ações -->
+<div class="actions">
+  <button>➕ Take</button>
+  <button>📄 Duplicar</button>
+  <button>📤 Exportar</button>
+</div>
+
+<!-- Contador de takes -->
+<div class="stats">
+  <div class="stat-box">
+    <span class="label">TOTAL DE TAKES</span>
+    <span id="total" class="value total">0</span>
+  </div>
+
+  <div class="stat-box">
+    <span class="label">BOAS</span>
+    <span id="goodCount" class="value bom">0</span>
+  </div>
+
+  <div class="stat-box">
+    <span class="label">MELHOR</span>
+    <span id="bestCount" class="value melhor">0</span>
+  </div>
+
+  <div class="stat-box">
+    <span class="label">RUINS</span>
+    <span id="badCount" class="value ruin">0</span>
+  </div>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -75,7 +105,7 @@
 </table>
 
 </div>
-<script src="./js/javascript"></script>
+<script src="/js/javascript"></script>
 
 </body>
 </html>

@@ -28,7 +28,24 @@ function createRow(data = []) {
     const td = document.createElement("td");
 
     // ⭐ STATUS (primeira coluna)
-    if (i === 0) {
+  if (i === 0) {
+  td.classList.add("status-cell");
+
+  // mostrar status salvo
+  if (data.status === "status-good") td.textContent = "✅";
+  if (data.status === "status-bad") td.textContent = "❌";
+  if (data.status === "status-best") td.textContent = "⭐";
+
+  td.addEventListener("click", (e) => openStatusMenu(e, td));
+  td.addEventListener("touchstart", (e) => openStatusMenu(e, td)); //para celular
+}
+  /* if (i === 0) {
+  td.classList.add("status-cell");
+  td.textContent = "";
+
+  td.addEventListener("click", (e) => openStatusMenu(e, td));
+}
+    /*if (i === 0) {
       td.innerHTML = `
         <div class="buttons">
           <button onclick="mark(this, 'good')">✅</button>
@@ -36,7 +53,7 @@ function createRow(data = []) {
           <button onclick="mark(this, 'best')">⭐</button>
         </div>
       `;
-    }
+    } */
 
     // TAKE (índice 4)
     else if (i === 4) {
@@ -121,7 +138,9 @@ function focusCell(td) {
     td.focus();
   }
 }
-
+if (navigator.vibrate) {
+  navigator.vibrate(10);
+}
 // salvar dados
 function saveData() {
   const rows = [];
@@ -148,11 +167,21 @@ function saveData() {
   localStorage.setItem("boletim", JSON.stringify(rows));
 }
 
+updateStats();
+
 // carregar tabela
 if (savedData.length) {
   savedData.forEach(row => {
     const tr = createRow(row.data);
     tr.className = row.status;
+    tbody.appendChild(tr);
+    // 👇 AQUI entra o código
+    const statusCell = tr.querySelector(".status-cell");
+
+    if (row.status === "status-good") statusCell.textContent = "✅";
+    if (row.status === "status-bad") statusCell.textContent = "❌";
+    if (row.status === "status-best") statusCell.textContent = "⭐";
+
     tbody.appendChild(tr);
   });
 } else {
@@ -160,6 +189,8 @@ if (savedData.length) {
     tbody.appendChild(createRow());
   }
 }
+
+updateStats();
 
 // marcar take
 function mark(btn, type) {
@@ -169,6 +200,7 @@ function mark(btn, type) {
   row.classList.add(type);
 
   saveData();
+  
 }
 
 function handleEnter(e, td, tr) {
@@ -306,5 +338,103 @@ themeBtn.addEventListener("click", () => {
     html.setAttribute("data-theme", "dark");
     themeBtn.textContent = "☀️";
     localStorage.setItem("theme", "dark");
+  }
+});
+// Contador de takes
+function updateStats() {
+  let good = 0, bad = 0, best = 0;
+
+  document.querySelectorAll("#tableBody tr").forEach(tr => {
+    if (tr.classList.contains("status-good")) good++;
+    if (tr.classList.contains("status-bad")) bad++;
+    if (tr.classList.contains("status-best")) best++;
+  });
+
+  document.getElementById("total").textContent =
+    document.querySelectorAll("#tableBody tr").length;
+
+  document.getElementById("goodCount").textContent = good;
+  document.getElementById("badCount").textContent = bad;
+  document.getElementById("bestCount").textContent = best;
+}
+
+// Menu de marcar a qualidade do take
+let currentMenu = null;
+let currentStatusCell = null;  // nova funçao para marcar os takes
+
+function openStatusMenu(e, td) {
+  closeStatusMenu();
+
+  currentStatusCell = td; // 👈 GUARDA A CÉLULA
+
+  const menu = document.createElement("div");
+  menu.className = "status-menu";
+
+  menu.innerHTML = `
+  <button onclick="setStatus('status-good')">✅</button>
+  <button onclick="setStatus('status-bad')">❌</button>
+  <button onclick="setStatus('status-best')">⭐</button>
+  `;
+  /*menu.innerHTML = `
+    <button onclick="setStatus(this, 'status-good')">✅</button>
+    <button onclick="setStatus(this, 'status-bad')">❌</button>
+    <button onclick="setStatus(this, 'status-best')">⭐</button>
+  `; */
+
+  document.body.appendChild(menu);
+
+  menu.style.left = e.pageX - 60 + "px";
+  menu.style.top = e.pageY - 50 + "px";
+  //menu.style.left = e.pageX + "px";
+  //menu.style.top = e.pageY + "px";
+
+  currentMenu = menu;
+}
+
+// aplicar o status
+function setStatus(type) {
+  if (!currentStatusCell) return;
+
+  const row = currentStatusCell.closest("tr");
+
+  row.classList.remove("status-good", "status-bad", "status-best");
+  row.classList.add(type);
+
+  // atualizar ícone
+  if (type === "status-good") currentStatusCell.textContent = "✅";
+  if (type === "status-bad") currentStatusCell.textContent = "❌";
+  if (type === "status-best") currentStatusCell.textContent = "⭐";
+
+  saveData();
+  closeStatusMenu();
+}
+/*function setStatus(btn, type) {
+  const row = btn.closest("tr");
+
+  row.classList.remove("status-good", "status-bad", "status-best");
+  row.classList.add(type);
+
+  // mostra ícone na célula
+  const td = row.querySelector(".status-cell");
+
+  if (type === "status-good") td.textContent = "✅";
+  if (type === "status-bad") td.textContent = "❌";
+  if (type === "status-best") td.textContent = "⭐";
+
+  saveData();
+  closeStatusMenu();
+}*/
+
+// fechar ao clicar fora
+function closeStatusMenu() {
+  if (currentMenu) {
+    currentMenu.remove();
+    currentMenu = null;
+  }
+}
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".status-menu") && !e.target.closest(".status-cell")) {
+    closeStatusMenu();
   }
 });

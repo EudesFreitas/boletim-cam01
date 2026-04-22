@@ -7,7 +7,7 @@ body {
 }
 
 .paper {
-  background: #fff;
+  background: #fff; 
   width: 800px;
   padding: 40px;
   color: #000;
@@ -79,7 +79,7 @@ button {
   font-size: 14px;
 }
 
-.good {
+/*.good {
   background-color: #d4edda;
 }
 
@@ -89,7 +89,7 @@ button {
 
 .best {
   background-color: #fff3cd;
-}
+} */
 
 .modal {
   display: none;
@@ -188,12 +188,157 @@ td {
   color: #fff;
 }
 
-/*Colorir só a célula*/
+/*Colorir só a célula
 .good { background-color: #2ecc71; }
 .bad { background-color: #e74c3c; }
-.best { background-color: #f1c40f; }
+.best { background-color: #f1c40f; } */
 
 /* CSS do scroll */
 .table-container {
   overflow-x: auto;
+}
+
+/* Barra de ações */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.actions button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Destacar melhor TAKE 
+tr.best td:nth-child(5) {
+  background: #ffc107;
+  font-weight: bold;
+} */
+
+/* aplica cor na LINHA */
+tr.status-good td {
+  background-color: #2ecc71;
+}
+
+tr.status-bad td {
+  background-color: #e74c3c;
+}
+
+tr.status-best td {
+  background-color: #f1c40f;
+} 
+
+/* contador de takes*/
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border-radius: 6px;
+  /*display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;*/
+}
+
+.stat-box {
+  
+  text-align: center;
+  flex: 1;
+}
+
+.label {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* cores iguais da imagem */
+.value.total {
+  color: #007bff;
+}
+
+.value.bom {
+  color: #28a745;
+}
+
+.value.melhor {
+  color: #ffc107;
+}
+
+.value.ruin {
+  color: #dc3545;
+} 
+/* status de marcar boa, ruin ou melhor*/
+.status-menu {
+  position: absolute;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+
+  animation: fadeIn 0.2s ease;
+ /* position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 5px;
+  display: flex;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000; */
+}
+
+.status-menu button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+ /* border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer; */
+}
+
+/* botão ativo */
+.status-menu button.active {
+  background: #eee;
+  transform: scale(1.2);
+}
+
+/* cores suaves */
+.status-menu button:nth-child(1) { background: #d4edda; } /* verde */
+.status-menu button:nth-child(2) { background: #f8d7da; } /* vermelho */
+.status-menu button:nth-child(3) { background: #fff3cd; } /* amarelo */
+
+/* animação */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
