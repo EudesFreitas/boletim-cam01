@@ -2,7 +2,7 @@ body {
   background: #222;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 5px;
   font-family: Arial, sans-serif;
 }
 
@@ -337,6 +337,14 @@ tr.status-best td {
   background: red;
   width: 100%;
   animation: holdProgress 2s linear;
+}
+
+.status-btn.clean {
+ 
+}
+
+.status-btn.clean:hover {
+  background: #66666660;
 }
 
 @keyframes holdProgress {

@@ -33,14 +33,13 @@ function createRow(data = []) {
 
     // ⭐ STATUS (primeira coluna)
   if (i === 0) {
-  td.classList.add("status-cell");
-
+    td.classList.add("status-cell");
+    td.addEventListener("click", (e) => openStatusMenu(e, td));
   // mostrar status salvo
-  if (data.status === "status-good") td.textContent = "✅";
+  /*if (data.status === "status-good") td.textContent = "✅";
   if (data.status === "status-bad") td.textContent = "❌";
-  if (data.status === "status-best") td.textContent = "⭐";
+  if (data.status === "status-best") td.textContent = "⭐"; */
 
-  td.addEventListener("click", (e) => openStatusMenu(e, td));
   td.addEventListener("touchstart", (e) => openStatusMenu(e, td)); //para celular
 }
   /* if (i === 0) {
@@ -136,30 +135,29 @@ function moveToNextCell(td, tr) {
   } else {
     let nextRow = tr.nextElementSibling;
 
+    if (!nextRow) {
+      nextRow = createRow();
+      tbody.appendChild(nextRow);
+    }
+
+    focusCell(nextRow.firstChild);
+  }
+}
+/*function moveToNextCell(td, tr) {
+  let next = td.nextElementSibling;
+
+  if (next) {
+    focusCell(next);
+  } else {
+    let nextRow = tr.nextElementSibling;
+
     // 🚫 NÃO cria nova linha automaticamente
     if (nextRow) {
       focusCell(nextRow.firstChild);
     }
   }
-}
- /* if (next) {
-    focusCell(next);
-  } else {
-    let nextRow = tr.nextElementSibling;
-
-    if (!nextRow && !creatingRow) {
-      nextRow = createRow();
-      tbody.appendChild(nextRow);
-    }
-
-  /*  if (!nextRow) {
-      nextRow = createRow();
-      tbody.appendChild(nextRow);
-    } 
-
-    focusCell(nextRow.firstChild);
-  }
 } */
+ 
 
 // focar corretamente (inclusive na coluna TAKE)
 function focusCell(td) {
@@ -208,25 +206,26 @@ if (savedData.length) {
     const tr = createRow(row.data);
     tr.className = row.status;
     
-    // 👇 AQUI entra o código
     const statusCell = tr.querySelector(".status-cell");
 
     if (row.status === "status-good") statusCell.textContent = "✅";
     if (row.status === "status-bad") statusCell.textContent = "❌";
     if (row.status === "status-best") statusCell.textContent = "⭐";
 
-   tbody.appendChild(tr);
+    tbody.appendChild(tr);
   });
+
+  syncCounters(); // 🔥 mantém contagem
 } else {
   for (let i = 0; i < 15; i++) {
-    
-   tbody.insertBefore(newRow, tbody.firstChild);
-  
+    const newRow = createRow();
+    tbody.appendChild(newRow);
   }
+
+  syncCounters(); // 🔥 garante início correto
 }
 
 updateStats();
-
 
 // marcar take
 function mark(btn, type) {
@@ -376,17 +375,8 @@ themeBtn.addEventListener("click", () => {
     localStorage.setItem("theme", "dark");
   }
 });
-// Contador de takes
-function updateStats() {
-  let good = 0, bad = 0, best = 0;
 
-  document.querySelectorAll("#tableBody tr").forEach(tr => {
-    if (tr.classList.contains("status-good")) good++;
-    if (tr.classList.contains("status-bad")) bad++;
-    if (tr.classList.contains("status-best")) best++;
-  });
-
-  function syncCounters() {
+ function syncCounters() {
   const rows = document.querySelectorAll("#tableBody tr");
 
   takeCounter = 0;
@@ -411,6 +401,16 @@ function updateStats() {
     }
   });
 }
+// Contador de takes
+function updateStats() {
+  let good = 0, bad = 0, best = 0;
+
+  document.querySelectorAll("#tableBody tr").forEach(tr => {
+    if (tr.classList.contains("status-good")) good++;
+    if (tr.classList.contains("status-bad")) bad++;
+    if (tr.classList.contains("status-best")) best++;
+  });
+
 
     // 👇 TOTAL agora é só o que foi marcado
   const total = good + bad + best;
@@ -446,7 +446,8 @@ function openStatusMenu(e, td) {
   <button class="status-btn" onclick="setStatus('status-best')">⭐</button>
   <div class="divider"></div>
 
-  <button class="status-btn delete" id="deleteBtn">🗑️</button>
+  <button class="status-btn delete" id="deleteBtn">🧽</button>
+  <button class="status-btn clean" onclick="removeEmptyRows()">🗑️</button>
 `;
   /*menu.innerHTML = `
    <button onclick="setStatus('status-good')">✅</button>
@@ -484,22 +485,6 @@ function setStatus(type) {
   closeStatusMenu();
 }
 
-/*function setStatus(btn, type) {
-  const row = btn.closest("tr");
-
-  row.classList.remove("status-good", "status-bad", "status-best");
-  row.classList.add(type);
-
-  // mostra ícone na célula
-  const td = row.querySelector(".status-cell");
-
-  if (type === "status-good") td.textContent = "✅";
-  if (type === "status-bad") td.textContent = "❌";
-  if (type === "status-best") td.textContent = "⭐";
-
-  saveData();
-  closeStatusMenu();
-}*/
 
 // fechar ao clicar fora
 function closeStatusMenu() {
@@ -520,7 +505,35 @@ function resetClipCounter() {
   clipCounter = 0;
   closeStatusMenu();
 } */
+
+function removeEmptyRows() {
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  rows.forEach(tr => {
+    const cells = tr.querySelectorAll("td");
+
+    let isEmpty = true;
+
+    cells.forEach((td, index) => {
+      if (index === 0) return; // ignora STATUS
+      if (index === 8 && td.dataset.obs) isEmpty = false;
+
+      if (td.textContent.trim() !== "") {
+        isEmpty = false;
+      }
+    });
+
+    if (isEmpty) {
+      tr.remove();
+    }
+  });
+
+  saveData();
+  updateStats();
+}
+
 // LIMPAR TODAS AS CELULAS 
+
 function clearRow() {
   if (!currentStatusCell) return;
 
@@ -548,7 +561,7 @@ function clearRow() {
   saveData();
   updateStats();
   closeStatusMenu();
-}
+} 
 
 // BOTAO (TOQUE LONGO) PARA LIMPAR
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -574,6 +587,25 @@ function getLastValue(colIndex) { // 1º
 function formatTake(num) {
   return "T" + String(num).padStart(3, "0");
 }
+
+function getNextTake() {
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  let lastNumber = 0;
+
+  // 🔥 percorre DE BAIXO PRA CIMA
+  for (let i = rows.length - 1; i >= 0; i--) {
+    const value = rows[i].children[4].textContent.trim();
+
+    const match = value.match(/\d+/);
+    if (match) {
+      lastNumber = Number(match[0]);
+      break;
+    }
+  }
+
+  return lastNumber + 1;
+}
 //botão TAKE
 document.getElementById("addTake").addEventListener("click", (e) => {
   e.preventDefault();
@@ -592,9 +624,9 @@ document.getElementById("addTake").addEventListener("click", (e) => {
   });
 
   // 👉 incrementa contador
-  takeCounter++;
-
-  const newTake = formatTake(takeCounter);
+  //takeCounter++;
+  //const newTake = formatTake(takeCounter);
+  const newTake = formatTake(getNextTake());
 
   if (emptyRow) {
     emptyRow.children[4].textContent = newTake;
@@ -705,71 +737,3 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
     }
   });
 }
-/*document.getElementById("addClip").addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const rows = document.querySelectorAll("#tableBody tr");
-
-  let max = 0;
-  let emptyRow = null;
-
-  rows.forEach(tr => {
-  const cell = tr.children[1]; // coluna CLIPE
-  if (!cell) return;
-
-  const value = cell.textContent.trim();
-
-  // COLOCA AQUI
-  const match = value.match(/\d+/);
-  const num = match ? Number(match[0]) : NaN;
-
-  if (!isNaN(num)) {
-    max = Math.max(max, num);
-  }
-
-  // continua igual
-  if (!value && !emptyRow) {
-    emptyRow = tr;
-  }
-}); */
-  /*rows.forEach(tr => {
-    const cell = tr.children[1]; // coluna CLIPE
-    if (!cell) return;
-
-    const value = cell.textContent.trim();
-
-    // maior número
-    const num = Number(value);
-
-    if (Number.isInteger(num)) {
-      max = Math.max(max, num);
-    }
-
-    // primeira linha vazia
-    if (!value && !emptyRow) {
-      emptyRow = tr;
-    }
-  }); 
-
-  const newClip = max + 1;
-
-  if (emptyRow) {
-    emptyRow.children[1].textContent = formatClip(newClip);
-    emptyRow.children[1].focus();
-  } else {
-    const newRow = createRow();
-    newRow.children[1].textContent = formatClip(newClip);
-
-    tbody.appendChild(newRow);
-    newRow.children[1].focus();
-  } 
-  // SEGURANÇA EXTRA 
-  if (/^\d+$/.test(value)) {
-  const num = Number(value);
-  max = Math.max(max, num);
-}
-
-  saveData();
-  updateStats();
-}); */
-
