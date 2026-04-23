@@ -1,3 +1,7 @@
+let clipCounter = 0; // CRIAR CONTROLE DE CONTAGEM
+let takeCounter = 0; // controle de contagem take
+let creatingRow = false; // Adiciona uma variável de controle
+
 const tbody = document.getElementById("tableBody");
 
 const headerFields = [
@@ -120,14 +124,30 @@ function moveToNextCell(td, tr) {
   } else {
     let nextRow = tr.nextElementSibling;
 
-    if (!nextRow) {
+    // 🚫 NÃO cria nova linha automaticamente
+    if (nextRow) {
+      focusCell(nextRow.firstChild);
+    }
+  }
+}
+ /* if (next) {
+    focusCell(next);
+  } else {
+    let nextRow = tr.nextElementSibling;
+
+    if (!nextRow && !creatingRow) {
       nextRow = createRow();
       tbody.appendChild(nextRow);
     }
 
+  /*  if (!nextRow) {
+      nextRow = createRow();
+      tbody.appendChild(nextRow);
+    } 
+
     focusCell(nextRow.firstChild);
   }
-}
+} */
 
 // focar corretamente (inclusive na coluna TAKE)
 function focusCell(td) {
@@ -165,6 +185,7 @@ function saveData() {
   });
 
   localStorage.setItem("boletim", JSON.stringify(rows));
+  // localStorage.clear();  limpa toda pagina
 }
 
 updateStats();
@@ -174,7 +195,7 @@ if (savedData.length) {
   savedData.forEach(row => {
     const tr = createRow(row.data);
     tr.className = row.status;
-    tbody.appendChild(tr);
+    
     // 👇 AQUI entra o código
     const statusCell = tr.querySelector(".status-cell");
 
@@ -182,11 +203,13 @@ if (savedData.length) {
     if (row.status === "status-bad") statusCell.textContent = "❌";
     if (row.status === "status-best") statusCell.textContent = "⭐";
 
-    tbody.appendChild(tr);
+   tbody.appendChild(tr);
   });
 } else {
   for (let i = 0; i < 15; i++) {
-    tbody.appendChild(createRow());
+   // tbody.appendChild(createRow());
+   tbody.insertBefore(newRow, tbody.firstChild);
+  
   }
 }
 
@@ -350,20 +373,28 @@ function updateStats() {
     if (tr.classList.contains("status-best")) best++;
   });
 
-  document.getElementById("total").textContent =
+    // 👇 TOTAL agora é só o que foi marcado
+  const total = good + bad + best;
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("goodCount").textContent = good;
+  document.getElementById("badCount").textContent = bad;
+  document.getElementById("bestCount").textContent = best;
+ /* document.getElementById("total").textContent =
     document.querySelectorAll("#tableBody tr").length;
 
   document.getElementById("goodCount").textContent = good;
   document.getElementById("badCount").textContent = bad;
-  document.getElementById("bestCount").textContent = best;
+  document.getElementById("bestCount").textContent = best; */
 }
 
 // Menu de marcar a qualidade do take
 let currentMenu = null;
 let currentStatusCell = null;  // nova funçao para marcar os takes
-
+// mudar status do menu
 function openStatusMenu(e, td) {
   closeStatusMenu();
+
 
   currentStatusCell = td; // 👈 GUARDA A CÉLULA
 
@@ -374,6 +405,8 @@ function openStatusMenu(e, td) {
   <button onclick="setStatus('status-good')">✅</button>
   <button onclick="setStatus('status-bad')">❌</button>
   <button onclick="setStatus('status-best')">⭐</button>
+  <hr>
+  <button onclick="resetClipCounter()">🔄</button>
   `;
   /*menu.innerHTML = `
     <button onclick="setStatus(this, 'status-good')">✅</button>
@@ -408,6 +441,10 @@ function setStatus(type) {
   saveData();
   closeStatusMenu();
 }
+
+if (navigator.vibrate) {
+  navigator.vibrate(10);
+}
 /*function setStatus(btn, type) {
   const row = btn.closest("tr");
 
@@ -438,3 +475,174 @@ document.addEventListener("click", (e) => {
     closeStatusMenu();
   }
 });
+
+// resetar o clip
+function resetClipCounter() {
+  clipCounter = 0;
+  closeStatusMenu();
+}
+
+//função para pegar último valor
+function getLastValue(colIndex) { // 1º
+  const rows = document.querySelectorAll("#tableBody tr");
+  let last = 0;
+
+  rows.forEach(tr => {
+    const td = tr.children[colIndex];
+    const value = parseInt(td.textContent);
+
+    if (!isNaN(value) && value > last) {
+      last = value;
+    }
+  });
+
+  return last;
+}
+// função de formatação TAKE
+function formatTake(num) {
+  return "T" + String(num).padStart(3, "0");
+}
+//botão TAKE
+document.getElementById("addTake").addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  let emptyRow = null;
+
+  rows.forEach(tr => {
+    const cell = tr.children[4]; // coluna TAKE
+    const value = cell.textContent.trim();
+
+    if (!value && !emptyRow) {
+      emptyRow = tr;
+    }
+  });
+
+  // 👉 incrementa contador
+  takeCounter++;
+
+  const newTake = formatTake(takeCounter);
+
+  if (emptyRow) {
+    emptyRow.children[4].textContent = newTake;
+    emptyRow.children[4].focus();
+  } else {
+    const newRow = createRow();
+    newRow.children[4].textContent = newTake;
+
+    tbody.appendChild(newRow);
+    newRow.children[4].focus();
+  }
+
+  saveData();
+});
+
+//mostrar formatado (C001)
+function formatClip(num) {
+  return "C" + String(num).padStart(3, "0");
+}
+
+//botão CLIPE
+document.getElementById("addClip").addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  let emptyRow = null;
+
+  rows.forEach(tr => {
+    const cell = tr.children[1];
+    const value = cell.textContent.trim();
+
+    if (!value && !emptyRow) {
+      emptyRow = tr;
+    }
+  });
+
+  // 👉 incrementa contador
+  clipCounter++;
+
+  const newClip = "C" + String(clipCounter).padStart(3, "0");
+
+  if (emptyRow) {
+    emptyRow.children[1].textContent = newClip;
+    emptyRow.children[1].focus();
+  } else {
+    const newRow = createRow();
+    newRow.children[1].textContent = newClip;
+
+    tbody.appendChild(newRow);
+    newRow.children[1].focus();
+  }
+
+  saveData();
+});
+/*document.getElementById("addClip").addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  let max = 0;
+  let emptyRow = null;
+
+  rows.forEach(tr => {
+  const cell = tr.children[1]; // coluna CLIPE
+  if (!cell) return;
+
+  const value = cell.textContent.trim();
+
+  // COLOCA AQUI
+  const match = value.match(/\d+/);
+  const num = match ? Number(match[0]) : NaN;
+
+  if (!isNaN(num)) {
+    max = Math.max(max, num);
+  }
+
+  // continua igual
+  if (!value && !emptyRow) {
+    emptyRow = tr;
+  }
+}); */
+  /*rows.forEach(tr => {
+    const cell = tr.children[1]; // coluna CLIPE
+    if (!cell) return;
+
+    const value = cell.textContent.trim();
+
+    // maior número
+    const num = Number(value);
+
+    if (Number.isInteger(num)) {
+      max = Math.max(max, num);
+    }
+
+    // primeira linha vazia
+    if (!value && !emptyRow) {
+      emptyRow = tr;
+    }
+  }); 
+
+  const newClip = max + 1;
+
+  if (emptyRow) {
+    emptyRow.children[1].textContent = formatClip(newClip);
+    emptyRow.children[1].focus();
+  } else {
+    const newRow = createRow();
+    newRow.children[1].textContent = formatClip(newClip);
+
+    tbody.appendChild(newRow);
+    newRow.children[1].focus();
+  } 
+  // SEGURANÇA EXTRA 
+  if (/^\d+$/.test(value)) {
+  const num = Number(value);
+  max = Math.max(max, num);
+}
+
+  saveData();
+  updateStats();
+}); */
+

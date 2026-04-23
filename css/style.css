@@ -283,7 +283,8 @@ tr.status-best td {
 .value.ruin {
   color: #dc3545;
 } 
-/* status de marcar boa, ruin ou melhor*/
+/* container do menu
+status de marcar boa, ruin ou melhor*/
 .status-menu {
   position: absolute;
   background: #fff;
@@ -305,9 +306,44 @@ tr.status-best td {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   z-index: 1000; */
 }
+/* botões padrão */
+.status-btn {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
 
+/* efeito ao passar o mouse */
+.status-btn:hover {
+  background: #f0f0f0;
+  transform: scale(1.1);
+}
+/* separador */
+.divider {
+  width: 1px;
+  background: #ccc;
+  margin: 0 3px;
+}
+
+/* botão reset opcional (destaque leve) */
+.status-btn.reset:hover {
+  background: #ffeaea;
+}
+/* MELHORIA VISUAL*/
+.status-menu hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 5px 0;
+}
 .status-menu button {
-  width: 40px;
+  display: block;
+  width: 100%;
+  padding: 5px;
+  /*width: 40px; */
   height: 40px;
   border-radius: 50%;
   border: none;
