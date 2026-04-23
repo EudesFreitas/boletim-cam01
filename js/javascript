@@ -170,7 +170,7 @@ function focusCell(td) {
     td.focus();
   }
 }
-if (navigator.vibrate) {
+if (navigator.vibrate) { // 01
   navigator.vibrate(10);
 }
 // salvar dados
@@ -219,13 +219,14 @@ if (savedData.length) {
   });
 } else {
   for (let i = 0; i < 15; i++) {
-   // tbody.appendChild(createRow());
+    
    tbody.insertBefore(newRow, tbody.firstChild);
   
   }
 }
 
 updateStats();
+
 
 // marcar take
 function mark(btn, type) {
@@ -385,6 +386,32 @@ function updateStats() {
     if (tr.classList.contains("status-best")) best++;
   });
 
+  function syncCounters() {
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  takeCounter = 0;
+  clipCounter = 0;
+
+  rows.forEach(tr => {
+    const take = tr.children[4].textContent.trim();
+    const clip = tr.children[1].textContent.trim();
+
+    // TAKE
+    const takeMatch = take.match(/\d+/);
+    if (takeMatch) {
+      const num = Number(takeMatch[0]);
+      if (num > takeCounter) takeCounter = num;
+    }
+
+    // CLIPE
+    const clipMatch = clip.match(/\d+/);
+    if (clipMatch) {
+      const num = Number(clipMatch[0]);
+      if (num > clipCounter) clipCounter = num;
+    }
+  });
+}
+
     // 👇 TOTAL agora é só o que foi marcado
   const total = good + bad + best;
 
@@ -414,16 +441,19 @@ function openStatusMenu(e, td) {
   menu.className = "status-menu";
 
   menu.innerHTML = `
-  <button onclick="setStatus('status-good')">✅</button>
+  <button class="status-btn" onclick="setStatus('status-good')">✅</button>
+  <button class="status-btn" onclick="setStatus('status-bad')">❌</button>
+  <button class="status-btn" onclick="setStatus('status-best')">⭐</button>
+  <div class="divider"></div>
+
+  <button class="status-btn delete" id="deleteBtn">🗑️</button>
+`;
+  /*menu.innerHTML = `
+   <button onclick="setStatus('status-good')">✅</button>
   <button onclick="setStatus('status-bad')">❌</button>
   <button onclick="setStatus('status-best')">⭐</button>
   <hr>
   <button onclick="resetClipCounter()">🔄</button>
-  `;
-  /*menu.innerHTML = `
-    <button onclick="setStatus(this, 'status-good')">✅</button>
-    <button onclick="setStatus(this, 'status-bad')">❌</button>
-    <button onclick="setStatus(this, 'status-best')">⭐</button>
   `; */
 
   document.body.appendChild(menu);
@@ -454,9 +484,6 @@ function setStatus(type) {
   closeStatusMenu();
 }
 
-if (navigator.vibrate) {
-  navigator.vibrate(10);
-}
 /*function setStatus(btn, type) {
   const row = btn.closest("tr");
 
@@ -488,11 +515,44 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// resetar o clip
+/*resetar o clip
 function resetClipCounter() {
   clipCounter = 0;
   closeStatusMenu();
+} */
+// LIMPAR TODAS AS CELULAS 
+function clearRow() {
+  if (!currentStatusCell) return;
+
+  const row = currentStatusCell.closest("tr");
+
+  row.querySelectorAll("td").forEach((td, index) => {
+    // não mexe na coluna OBS (tratamento especial)
+    if (index === 8) {
+      td.dataset.obs = "";
+      td.textContent = "";
+      td.classList.remove("obs-filled");
+    }
+    // não mexe na coluna STATUS (ícone)
+    else if (index === 0) {
+      td.textContent = "";
+    }
+    else {
+      td.textContent = "";
+    }
+  });
+
+  // remove status da linha
+  row.classList.remove("status-good", "status-bad", "status-best");
+
+  saveData();
+  updateStats();
+  closeStatusMenu();
 }
+
+// BOTAO (TOQUE LONGO) PARA LIMPAR
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
 
 //função para pegar último valor
 function getLastValue(colIndex) { // 1º
@@ -614,6 +674,37 @@ document.getElementById("addClip").addEventListener("click", (e) => {
 
   saveData();
 });
+
+let pressTimer;
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#deleteBtn")) {
+    clearRow();
+  }
+});
+
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+  document.addEventListener("touchstart", (e) => {
+    if (e.target.closest("#deleteBtn")) {
+      const btn = e.target.closest("#deleteBtn");
+
+      btn.classList.add("holding");
+
+      pressTimer = setTimeout(() => {
+        clearRow();
+      }, 2000);
+    }
+  });
+
+  document.addEventListener("touchend", (e) => {
+    if (e.target.closest("#deleteBtn")) {
+      const btn = e.target.closest("#deleteBtn");
+
+      btn.classList.remove("holding");
+      clearTimeout(pressTimer);
+    }
+  });
+}
 /*document.getElementById("addClip").addEventListener("click", (e) => {
   e.preventDefault();
 

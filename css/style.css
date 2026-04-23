@@ -319,6 +319,30 @@ tr.status-best td {
   flex: 1;
 }
 
+.status-btn.delete:hover {
+  background: rgba(208, 24, 42, 0.521);
+}
+
+.status-btn.delete.holding {
+  background: rgba(220, 53, 69, 0.2);
+  transform: scale(1.2);
+}
+/* “barra de progresso” no botão (tipo carregando):*/
+.status-btn.delete.holding::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: red;
+  width: 100%;
+  animation: holdProgress 2s linear;
+}
+
+@keyframes holdProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
 .label {
   display: block;
   font-size: 11px;
