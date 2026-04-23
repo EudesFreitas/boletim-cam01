@@ -38,31 +38,42 @@ h1 {
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse; 
-  margin-top: 20px;
+ width: 100%;
+  border-collapse: collapse;
 
-  border: 1px solid #121111;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(8, 8, 8, 0.15);
-  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden; /* importante pro arredondamento */
 }
 
 th {
-  background: orange;
+  background: #f5a623; /* seu laranja */
+  color: #000;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  /*background: orange;
   border: 1px solid #000;
   padding: 5px;
   font-size: 12px;
-  /* Cabeçalho fixo (sticky) */
+  /* Cabeçalho fixo (sticky) 
   position: sticky;
   top: 0;
   z-index: 2;
-  background: orange; /* mantém visível */
+  background: orange;  mantém visível */
 }
 
 td {
-  border: 1px solid #000;
-  height: 25px;
+  border-bottom: 1px solid var(--border-color);
+  /*border: 1px solid #000;
+  height: 25px; */
+}
+
+td, th {
+  text-align: center;
+}
+tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 
@@ -160,10 +171,28 @@ td {
   font-weight: bold;
 }
 
+/* VARIÁVEIS */
+:root {
+  /* fundo e texto */
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --border-color: #ccc;
+}
+[data-theme="dark"] table {
+  border-color: #444;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+[data-theme="dark"] tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
 /* tema escuro */
 [data-theme="dark"] {
   background: #111;
   color: #eee;
+
+  --bg-color: #1e1e1e;
+  --text-color: #ffffff;
+  --border-color: #444;
 }
 
 [data-theme="dark"] .paper {
@@ -177,6 +206,7 @@ td {
 */
 [data-theme="dark"] td {
   border-color: #555;
+  border-bottom: 1px solid #444;
 }  
 
 [data-theme="dark"] .header-group {
@@ -188,6 +218,17 @@ td {
   color: #fff;
 }
 
+[data-theme="dark"] .actions button {
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] .actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] th {
+  background: #f5a623;
+  color: #fff;
+}
 /*Colorir só a célula
 .good { background-color: #2ecc71; }
 .bad { background-color: #e74c3c; }
@@ -206,10 +247,27 @@ td {
 }
 
 .actions button {
-  padding: 8px 12px;
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+ /* padding: 8px 12px;
   border-radius: 6px;
   border: none;
-  cursor: pointer;
+  cursor: pointer; */
+}
+/* interação*/
+.actions button:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 123, 255, 0.1);
 }
 
 /* Destacar melhor TAKE 
@@ -240,6 +298,12 @@ tr.status-best td {
   padding: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   border-radius: 6px;
+
+  background: var(--bg-color);
+  color: var(--text-color);
+
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   /*display: flex;
   justify-content: space-between;
   align-items: center;
@@ -258,7 +322,8 @@ tr.status-best td {
 .label {
   display: block;
   font-size: 11px;
-  color: #666;
+  color: var(--text-color);
+  opacity: 0.7;
   margin-bottom: 5px;
 }
 

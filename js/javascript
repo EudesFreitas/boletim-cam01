@@ -101,19 +101,31 @@ td.addEventListener("mouseleave", hideTooltip);
 }
 
     // outras colunas
-    else {
+  else {
+    td.contentEditable = true;
+    td.textContent = data[i] || "";
+
+    td.addEventListener("input", saveData);
+    td.addEventListener("keydown", e => handleEnter(e, td, tr));
+
+    // 👇 colunas com repetição
+    if ([2, 3, 5, 6, 7].includes(i)) {
+      td.addEventListener("dblclick", () => repeatLastValue(td, i));
+    }
+  }
+    /*else {
       td.contentEditable = true;
       td.textContent = data[i] || "";
 
       td.addEventListener("input", saveData);
       td.addEventListener("keydown", e => handleEnter(e, td, tr));
-    }
+    } */
 
     tr.appendChild(td);
   }
 
   return tr;
-}
+} 
 
 // função de navegação
 function moveToNextCell(td, tr) {
@@ -541,6 +553,30 @@ document.getElementById("addTake").addEventListener("click", (e) => {
 //mostrar formatado (C001)
 function formatClip(num) {
   return "C" + String(num).padStart(3, "0");
+}
+
+// CRIAR FUNÇÃO (GLOBAL) REPETIR CELULAS
+function repeatLastValue(td, colIndex) {
+  const rows = document.querySelectorAll("#tableBody tr");
+
+  let lastValue = "";
+
+  rows.forEach(tr => {
+    const cell = tr.children[colIndex];
+    const value = cell.textContent.trim();
+
+    if (value) {
+      lastValue = value;
+    }
+
+    // para quando chegar na linha atual
+    if (tr === td.parentElement) return;
+  });
+
+  if (lastValue) {
+    td.textContent = lastValue;
+    saveData();
+  }
 }
 
 //botão CLIPE
