@@ -110,7 +110,6 @@ button {
   font-size: 14px;
 }
 
-
 .modal {
   display: none;
   position: fixed;
@@ -263,6 +262,7 @@ td {
 
   background: var(--bg-color);
   color: var(--text-color);
+
 
   font-size: 14px;
   cursor: pointer;
@@ -489,7 +489,7 @@ status de marcar boa, ruin ou melhor*/
 .export-menu {
   position: absolute;
   top: 50px;
-  bottom: 60px;
+  bottom: 310px;
   right: 10px;
   z-index: 999; 
 
@@ -531,4 +531,49 @@ status de marcar boa, ruin ou melhor*/
 
 .export-menu button:hover {
   background: rgba(0,0,0,0.05);
+  
+}
+/* COM A, B, C, D*/
+.grade-btn {
+  background: var(--card);
+  font-weight: bold;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#gradeBtn {
+  background: var(--card);
+  color: var(--text); /* cor padrão */
+  border: 1px solid var(--border);
+  font-size: 26px;
+  font-weight: bold;
+  
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+#gradeBtn:hover {
+  background: rgba(0,0,0,0.05);
+  
+}
+
+/* Estados */
+
+
+#gradeBtn.grade-A {
+  color: red;
+}
+
+#gradeBtn.grade-B {
+  color: blue;
+}
+
+#gradeBtn.grade-C {
+  color: green;
+}
+
+#gradeBtn.grade-D {
+  color: gold;
 }

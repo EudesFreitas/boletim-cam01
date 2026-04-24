@@ -42,21 +42,6 @@ function createRow(data = []) {
 
   td.addEventListener("touchstart", (e) => openStatusMenu(e, td)); //para celular
 }
-  /* if (i === 0) {
-  td.classList.add("status-cell");
-  td.textContent = "";
-
-  td.addEventListener("click", (e) => openStatusMenu(e, td));
-}
-    /*if (i === 0) {
-      td.innerHTML = `
-        <div class="buttons">
-          <button onclick="mark(this, 'good')">✅</button>
-          <button onclick="mark(this, 'bad')">❌</button>
-          <button onclick="mark(this, 'best')">⭐</button>
-        </div>
-      `;
-    } */
 
     // TAKE (índice 4)
     else if (i === 4) {
@@ -143,20 +128,6 @@ function moveToNextCell(td, tr) {
     focusCell(nextRow.firstChild);
   }
 }
-/*function moveToNextCell(td, tr) {
-  let next = td.nextElementSibling;
-
-  if (next) {
-    focusCell(next);
-  } else {
-    let nextRow = tr.nextElementSibling;
-
-    // 🚫 NÃO cria nova linha automaticamente
-    if (nextRow) {
-      focusCell(nextRow.firstChild);
-    }
-  }
-} */
  
 
 // focar corretamente (inclusive na coluna TAKE)
@@ -449,18 +420,12 @@ function openStatusMenu(e, td) {
   <button class="status-btn delete" id="deleteBtn">🧽</button>
   <button class="status-btn clean" onclick="removeEmptyRows()">🗑️</button>
 `;
-  /*menu.innerHTML = `
-   <button onclick="setStatus('status-good')">✅</button>
-  <button onclick="setStatus('status-bad')">❌</button>
-  <button onclick="setStatus('status-best')">⭐</button>
-  <hr>
-  <button onclick="resetClipCounter()">🔄</button>
-  `; */
 
   document.body.appendChild(menu);
 
-  menu.style.left = e.pageX - 60 + "px";
+  menu.style.left = (e.pageX + 10) + "px";
   menu.style.top = e.pageY - 50 + "px";
+  //menu.style.left = e.pageX - 60 + "px";
   //menu.style.left = e.pageX + "px";
   //menu.style.top = e.pageY + "px";
 
@@ -738,26 +703,6 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   });
 }
 
-// (abrir/fechar menu) EXPORTAR
-/*document.addEventListener("DOMContentLoaded", () => {
-  const exportBtn = document.getElementById("exportBtn");
-  const exportMenu = document.getElementById("exportMenu");
-
-  if (!exportBtn || !exportMenu) return; // 🔥 evita quebrar tudo
-
-  exportBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // 🔥 impede fechar imediatamente
-
-    exportMenu.style.display =
-      exportMenu.style.display === "flex" ? "none" : "flex";
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest("#exportMenu")) {
-      exportMenu.style.display = "none";
-    }
-  });
-}); */
 // FUNÇAO EXPORTAR PDF
 function exportPDF() {
   const element = document.getElementById("tableBody");
@@ -827,4 +772,39 @@ if (exportBtn && exportMenu) {
     }
   });
 
+}
+// CAM A, B, C, D
+const gradeBtn = document.getElementById("gradeBtn");
+
+const grades = ["A", "B", "C", "D"];
+let currentIndex = 0;
+
+// carregar
+const savedGrade = localStorage.getItem("grade");
+if (savedGrade) {
+  currentIndex = grades.indexOf(savedGrade);
+}
+
+// aplicar estado inicial
+updateGrade();
+
+
+gradeBtn.addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % grades.length;
+  updateGrade();
+});
+
+function updateGrade() {
+  const grade = grades[currentIndex];
+
+  gradeBtn.textContent = grade;
+
+  // limpa classes antigas
+  gradeBtn.classList.remove("grade-A", "grade-B", "grade-C", "grade-D");
+
+  // adiciona nova
+  gradeBtn.classList.add(`grade-${grade}`);
+
+  // dentro do updateGrade()
+localStorage.setItem("grade", grade);
 }
