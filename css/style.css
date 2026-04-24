@@ -1,5 +1,22 @@
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --card: #f5f5f5;
+  --border: #dddddd;
+  --primary: #4CAF50;
+}
+
+[data-theme="dark"] {
+  --bg: #121212;
+  --text: #f5f5f5;
+  --card: #1e1e1e;
+  --border: #333;
+  --primary: #4CAF50;
+}
+
 body {
-  background: #222;
+  background: var(--bg);
+  color: var(--text);
   display: flex;
   justify-content: center;
   padding: 5px;
@@ -38,12 +55,13 @@ h1 {
 }
 
 table {
- width: 100%;
+  background: var(--card);
+  width: 100%;
   border-collapse: collapse;
 
   border: 1px solid var(--border-color);
   border-radius: 10px;
-   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   overflow: hidden; /* importante pro arredondamento */
 }
 
@@ -71,6 +89,7 @@ td {
 
 td, th {
   text-align: center;
+  border: 1px solid var(--border);
 }
 tbody tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.03);
@@ -85,22 +104,12 @@ tbody tr:nth-child(even) {
 
 button {
   cursor: pointer;
-  border: none;
   background: transparent;
+  color: var(--text);
+  border: none;
   font-size: 14px;
 }
 
-/*.good {
-  background-color: #d4edda;
-}
-
-.bad {
-  background-color: #f8d7da;
-}
-
-.best {
-  background-color: #fff3cd;
-} */
 
 .modal {
   display: none;
@@ -474,4 +483,52 @@ status de marcar boa, ruin ou melhor*/
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/*Menu Exportar*/
+.export-menu {
+  position: absolute;
+  top: 50px;
+  bottom: 60px;
+  right: 10px;
+  z-index: 999; 
+
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+  gap: 5px;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+
+  /* 🔥 ANIMAÇÃO */
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+
+  transition: all 0.3s ease;
+}
+
+/* estado visível */
+.export-menu.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.export-menu button {
+  background: none;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.export-menu button:hover {
+  background: rgba(0,0,0,0.05);
 }

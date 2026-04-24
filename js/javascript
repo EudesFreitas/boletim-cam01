@@ -737,3 +737,94 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
     }
   });
 }
+
+// (abrir/fechar menu) EXPORTAR
+/*document.addEventListener("DOMContentLoaded", () => {
+  const exportBtn = document.getElementById("exportBtn");
+  const exportMenu = document.getElementById("exportMenu");
+
+  if (!exportBtn || !exportMenu) return; // 🔥 evita quebrar tudo
+
+  exportBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // 🔥 impede fechar imediatamente
+
+    exportMenu.style.display =
+      exportMenu.style.display === "flex" ? "none" : "flex";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#exportMenu")) {
+      exportMenu.style.display = "none";
+    }
+  });
+}); */
+// FUNÇAO EXPORTAR PDF
+function exportPDF() {
+  const element = document.getElementById("tableBody");
+
+  html2pdf()
+    .from(element)
+    .save("boletim.pdf");
+}
+
+// FUNÇAO EXPORTAR IMAGEM
+function exportImage() {
+  const element = document.querySelector("table");
+
+  html2canvas(element).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "boletim.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+// SALVAR (estrutura para página futura)
+function saveProject() {
+  const data = localStorage.getItem("boletim");
+
+  let projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+  projects.push({
+    name: "Projeto " + new Date().toLocaleString(),
+    data: JSON.parse(data)
+  });
+
+  localStorage.setItem("projects", JSON.stringify(projects));
+
+  alert("Projeto salvo!");
+}
+
+// COMPARTILHAR
+function shareData() {
+  const text = "Confira meu boletim de filmagem 🎬";
+
+  if (navigator.share) {
+    navigator.share({
+      title: "Boletim",
+      text: text,
+    });
+  } else {
+    alert("Compartilhamento não suportado nesse dispositivo");
+  }
+}
+
+// MENU EXPORTAR (versão com animação)
+const exportBtn = document.getElementById("exportBtn");
+const exportMenu = document.getElementById("exportMenu");
+
+if (exportBtn && exportMenu) {
+
+  exportBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    exportMenu.classList.toggle("active");
+  });
+
+  // fechar ao clicar fora
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#exportMenu") && !e.target.closest("#exportBtn")) {
+      exportMenu.classList.remove("active");
+    }
+  });
+
+}

@@ -50,9 +50,17 @@
 <div class="actions">
   <button id="addClip" type="button">➕ Clipe</button>
   <button id="addTake" type="button">➕ Take</button>
-  <button>📤 Exportar</button>
+  <!-- <button>📤 Exportar</button> -->
+  <button id="exportBtn">📤 Exportar</button>
 </div>
 
+<!-- estrutura do menu Exportar-->
+<div id="exportMenu" class="export-menu">
+  <button onclick="exportPDF()">📄 PDF</button>
+  <button onclick="exportImage()">🖼️ Imagem</button>
+  <button onclick="saveProject()">💾 Salvar</button>
+  <button onclick="shareData()">📤 Compartilhar</button>
+</div>
 <!-- Contador de takes -->
 <div class="stats">
   <div class="stat-box">
@@ -106,6 +114,9 @@
 
 </div>
 <script src="./js/javascript"></script>
+
+<!-- EXPORTAR PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>
