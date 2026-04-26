@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boletim de Câmera</title>
+<script>
+  const temaSalvo = localStorage.getItem("theme");
+  if (temaSalvo === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+</script>
 <link rel="stylesheet" href="../css/boletim.css">
 <link rel="stylesheet" href="../css/responsive.css">
 
@@ -116,6 +122,7 @@
 </table>
 
 </div>
+<script src="../js/theme.js"></script>
 <script src="../js/boletim.js"></script>
 
 <!-- EXPORTAR PDF -->

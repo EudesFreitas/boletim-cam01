@@ -25,6 +25,9 @@
 body {
   background: var(--bg);
   color: var(--text);
+
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
 /* HEADER */
@@ -55,28 +58,78 @@ header h1 {
   cursor: pointer;
 }
 
-/* CARDS */
+/* testes.  CENTRALIZA TUDO */
+.container {
+  height: calc(100vh - 60px); /* desconta header */
+  padding: 20px;
+}
+
+/* BLOCO PRINCIPAL (tipo boletim) */
+.content-box {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+
+  background: var(--bg);
+  border-radius: 15px;
+  padding: 20px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* testes. CARDS */
+.card {
+  flex: 1; /* 🔥 isso divide igualmente */
+  background: var(--card);
+  border-radius: 12px;
+  border-left: 4px solid #007bff;
+  padding: 20px;
+  min-height: 120px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+  transition: 0.3s;
+}
+/* CARDS 
 .cards {
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
+} */
 
-.card {
-  background: var(--card);
-  padding: 25px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
+/* testes*/
 .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+/* .card:hover {
   transform: scale(1.03);
+} */
+
+/* .card h2 {
+  margin: 0 0 10px;
+} */
+/* testes*/
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
 }
 
-.card h2 {
-  margin: 0 0 10px;
+.card p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.7;
 }
 
 /* BOTÃO FLUTUANTE */

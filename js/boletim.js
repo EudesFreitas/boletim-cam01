@@ -321,7 +321,7 @@ modal.addEventListener("click", function (e) {
     closeModal();
   }
 });
-
+/*
 // Tema escuro
 const themeBtn = document.getElementById("toggleTheme");
 const html = document.documentElement;
@@ -345,7 +345,7 @@ themeBtn.addEventListener("click", () => {
     themeBtn.textContent = "☀️";
     localStorage.setItem("theme", "dark");
   }
-});
+}); */
 
  function syncCounters() {
   const rows = document.querySelectorAll("#tableBody tr");
