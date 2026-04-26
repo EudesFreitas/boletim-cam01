@@ -1,124 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boletim de Câmera</title>
-<link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="./css/responsive.css">
-
+  <meta charset="UTF-8">
+  <title>App de Boletim</title>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
 
-<div class="paper">
+<header>
+  <button class="menu-btn">☰</button>
+  <button id="toggleTheme">🌙</button>
+  <h1>Boletim de Câmera</h1>
+</header>
 
-<h1>BOLETIM DE CÂMERA</h1>
-
-<button id="toggleHeader">📋</button>
-<button id="toggleTheme">🌙</button>
-
-<div id="headerContainer">
-<div class="header">
-
-  <div class="header-group">
-    <div>FILME: <span contenteditable="true" id="filme"></span></div>
-    <div>DATA: <span contenteditable="true" id="data"></span></div>
-  </div>
-
-  <div class="header-group">
-    <div>FOTO: <span contenteditable="true" id="foto"></span></div>
-    <div>PROD: <span contenteditable="true" id="produtora"></span></div>
-  </div>
-
-  <div class="header-group">
-    <div>ISO: <span contenteditable="true" id="iso"></span></div>
-    <div>WB: <span contenteditable="true" id="wb"></span></div>
-    <div>FPS: <span contenteditable="true" id="fps"></span></div>
-  </div>
-
-  <div class="header-group">
-    <div>SHUT: <span contenteditable="true" id="shutter"></span></div>
-    <div>RES: <span contenteditable="true" id="resolucao"></span></div>
-    <div>CARD: <span contenteditable="true" id="card"></span></div>
-  </div>
-
-</div>
-</div>
-<div class="table-container">
-  <!-- Barra de ações -->
-<div class="actions">
-  <button id="addClip" type="button">➕ Clipe</button>
-  <button id="addTake" type="button">➕ Take</button>
-  <button id="gradeBtn">A</button>
-  <!-- <button id="gradeBtn" class="grade-btn">A</button> -->
-  <button id="exportBtn">...</button>
-</div>
-
-<!-- estrutura do menu Exportar-->
-<div id="exportMenu" class="export-menu">
-  <h3>Exportar</h3>
-  <button onclick="exportPDF()">📄 PDF</button>
-  <button onclick="exportImage()">🖼️ Imagem</button>
-  <button onclick="saveProject()">📁 Salvar</button>
-  <button onclick="shareData()">⤴️ Compartilhar</button>
-</div>
-<!-- Contador de takes -->
-<div class="stats">
-  <div class="stat-box">
-    <span class="label">TOTAL</span>
-    <span id="total" class="value total">0</span>
-  </div>
-
-  <div class="stat-box">
-    <span class="label">BOAS</span>
-    <span id="goodCount" class="value bom">0</span>
-  </div>
-
-  <div class="stat-box">
-    <span class="label">MELHOR</span>
-    <span id="bestCount" class="value melhor">0</span>
-  </div>
-
-  <div class="stat-box">
-    <span class="label">RUINS</span>
-    <span id="badCount" class="value ruin">0</span>
-  </div>
-</div>
-
-<table>
-  <thead>
-    <tr>
-      <th>⭐</th>
-      <th>CLIPE</th>
-      <th>SEQ.</th>
-      <th>PLANO</th>
-      <th>TAKE</th>
-      <th>FILTRO</th>
-      <th>LENTE</th>
-      <th>DIAF.</th>
-      <th>OBS.</th>
-    </tr>
-  </thead>
-
-  <tbody id="tableBody">
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <h3>Observação</h3>
-      <textarea id="modalText"></textarea>
-     <!-- <button onclick="closeModal()">Salvar</button> --> 
+<main>
+  <div class="cards">
+    
+   <div class="card" onclick="irPara('pages/projeto.html')"> 
+      <h2>📽️ Projeto Atual</h2>
+      <p>Acessar boletins em andamento</p>
     </div>
-  </div>  
-  <div id="tooltip" class="tooltip"></div>
-  </tbody>
-</div>
-</table>
 
-</div>
-<script src="./js/javascript"></script>
+    <div class="card" onclick="irPara('finalizados.html')">
+      <h2>✅ Projetos Finalizados</h2>
+      <p>Ver histórico de Projetos</p>
+    </div>
 
-<!-- EXPORTAR PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </div>
+</main>
 
+<!-- botão flutuante -->
+<button class="fab" onclick="novaPagina()">➕</button>
+<script src="js/theme.js"></script>
+<script src="./js/script.js"></script>
 </body>
 </html>

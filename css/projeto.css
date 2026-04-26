@@ -21,20 +21,20 @@
   cursor: pointer;
 }
 
-/* aplica no site */
 body {
+  margin: 0;
+  font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
 }
 
-/* HEADER */
 header {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-bottom: 20px;
-  
+  gap: 10px;
+  padding: 10px;
   height: 60px;
   background: var(--card);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -45,14 +45,25 @@ header h1 {
   font-size: 20px;
 }
 
-/* MENU */
-.menu-btn {
-  position: absolute;
-  left: 15px;
-  font-size: 24px;
-  background: none;
-  border: none;
+main {
+  padding: 20px;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px;
   cursor: pointer;
+}
+
+#boletins, #pdfs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* CARDS */
@@ -65,7 +76,7 @@ header h1 {
 
 .card {
   background: var(--card);
-  padding: 25px;
+  padding: 10px;
   border-radius: 15px;
   cursor: pointer;
   transition: 0.3s;
@@ -74,9 +85,32 @@ header h1 {
 .card:hover {
   transform: scale(1.03);
 }
+/* botao de voltar*/
+.back-btn {
+  position: absolute;
+  left: 15px;
 
-.card h2 {
-  margin: 0 0 10px;
+  background: none;
+  border: none;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  padding: 8px;
+  border-radius: 50%;
+
+  transition: 0.3s;
+}
+
+/* efeito ao passar o mouse */
+.back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+/* efeito ao clicar */
+.back-btn:active {
+  transform: scale(0.95);
 }
 
 /* BOTÃO FLUTUANTE */
@@ -99,6 +133,4 @@ header h1 {
   transform: scale(1.1);
 }
 
-* {
-  transition: background 0.3s, color 0.3s;
-}
+

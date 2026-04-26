@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Projeto Atual</title>
+   <script>
+    const temaSalvo = localStorage.getItem("theme");
+    if (temaSalvo === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  </script>
+  <link rel="stylesheet" href="../css/projeto.css">
+</head>
+<body>
+
+<header>
+  <button class="back-btn" onclick="history.back()">⬅️</button>
+ <!-- <a href="../index.html" class="back-btn">⬅️</a> -->
+  <h1>Projeto Atual</h1>
+</header>
+
+<main>
+
+  <!-- AÇÕES 
+  <section class="acoes">
+    <button onclick="novoBoletim()">📄 Novo Boletim</button>
+    <button onclick="exportarPDF()">📥 Exportar PDF</button>
+  </section> -->
+
+  <!-- LISTA DE BOLETINS -->
+<section class="cards">
+
+  <div class="card" onclick="irPara('boletim.html')">
+    <h2>🎬 Entre os dias</h2>
+    <p>Acessar registros por período</p>
+  </div>
+
+  <div class="card">
+    <h2>🎬 Boletins</h2>
+    <p>Lista de boletins criados</p>
+  </div>
+
+</section>
+
+  <!-- PDFS -->
+  <!-- <section>
+    <h2>📁 PDFs Exportados</h2>
+    <div id="pdfs"></div>
+  </section> -->
+
+</main>
+<button class="fab" onclick="novaPagina()">➕</button>
+<script src="../js/theme.js"></script>
+<script src="../js/projeto.js"></script>
+</body>
+</html>
+
+
+
+
