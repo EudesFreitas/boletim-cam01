@@ -34,7 +34,7 @@ header {
   justify-content: center;
   position: relative;
   gap: 10px;
-  padding: 10px;
+  padding: 100px;
   height: 60px;
   background: var(--card);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
