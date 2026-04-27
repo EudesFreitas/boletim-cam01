@@ -39,6 +39,11 @@ h1 {
   font-size: 18px;
 }
 
+h3 {
+  text-align: center;
+  font-size: 20px;
+}
+
 .top-info {
   display: flex;
   justify-content: space-between;
@@ -109,7 +114,8 @@ button {
   background: transparent;
   color: var(--text);
   border: none;
-  font-size: 14px;
+  font-size: 20px;
+  padding: 5px;
 }
 
 .modal {
@@ -152,11 +158,6 @@ textarea {
   pointer-events: none;
   z-index: 1000;
   display: none;
-}
-
-button {
-  font-size: 18px;
-  padding: 5px;
 }
 
 td {
@@ -246,7 +247,7 @@ td {
 
 /* CSS do scroll */
 .table-container {
-  /* overflow-x: auto; responsavel pelo scroll*/
+  overflow-x: auto; /*responsavel pelo scroll*/
   padding-bottom: 10px;
 }
 
@@ -491,9 +492,9 @@ status de marcar boa, ruin ou melhor*/
 /*Menu Exportar*/
 .export-menu {
   position: absolute;
-  top: 50px;
-  bottom: 310px;
-  right: 10px;
+  top: 26%;
+  /* bottom: 310px; */
+  right: 15px;
   z-index: 999; 
 
   background: var(--bg);
