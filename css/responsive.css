@@ -26,6 +26,7 @@
 /*Tabela grande no celular quebra fácil.*/
 .paper {
   overflow-x: auto;
+  padding-bottom: 130px;
 }
 
 .header-group {

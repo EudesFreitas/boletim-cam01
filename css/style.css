@@ -78,7 +78,7 @@ header h1 {
 
   background: var(--bg);
   border-radius: 15px;
-  padding: 140px 170px 140px 170px;
+  padding: 140px 155px 140px 155px;
   margin-top: 45px;
 
   box-shadow: 0 4px 12px rgb(99 93 93 / 37%);
@@ -131,12 +131,12 @@ header h1 {
 /* testes*/
 .card h2 {
   margin: 0 0 8px;
-  font-size: 20px;
+  font-size: 35px;
 }
 
 .card p {
   margin: 0;
-  font-size: 15px;
+  font-size: 18px;
   opacity: 0.7;
 }
 
