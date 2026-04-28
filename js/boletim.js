@@ -6,7 +6,7 @@ const tbody = document.getElementById("tableBody");
 
 const headerFields = [
   "filme", "data", "foto", "produtora",
-  "iso", "wb", "fps", "shutter", "resolucao", "card"
+  "iso", "wb", "fps", "shutter", "resolucao", "card", "cam"
 ];
 
 const savedHeader = JSON.parse(localStorage.getItem("headerBoletim")) || {};
@@ -35,12 +35,7 @@ function createRow(data = []) {
   if (i === 0) {
     td.classList.add("status-cell");
     td.addEventListener("click", (e) => openStatusMenu(e, td));
-  // mostrar status salvo
-  /*if (data.status === "status-good") td.textContent = "✅";
-  if (data.status === "status-bad") td.textContent = "❌";
-  if (data.status === "status-best") td.textContent = "⭐"; */
-
-  td.addEventListener("touchstart", (e) => openStatusMenu(e, td)); //para celular
+    td.addEventListener("touchstart", (e) => openStatusMenu(e, td)); //para celular
 }
 
     // TAKE (índice 4)
@@ -97,13 +92,6 @@ td.addEventListener("mouseleave", hideTooltip);
       td.addEventListener("dblclick", () => repeatLastValue(td, i));
     }
   }
-    /*else {
-      td.contentEditable = true;
-      td.textContent = data[i] || "";
-
-      td.addEventListener("input", saveData);
-      td.addEventListener("keydown", e => handleEnter(e, td, tr));
-    } */
 
     tr.appendChild(td);
   }
@@ -321,31 +309,7 @@ modal.addEventListener("click", function (e) {
     closeModal();
   }
 });
-/*
-// Tema escuro
-const themeBtn = document.getElementById("toggleTheme");
-const html = document.documentElement;
 
-// carregar tema salvo
-const savedTheme = localStorage.getItem("theme");
-
-if (savedTheme === "dark") {
-  html.setAttribute("data-theme", "dark");
-  themeBtn.textContent = "☀️";
-}
-
-// alternar tema
-themeBtn.addEventListener("click", () => {
-  if (html.getAttribute("data-theme") === "dark") {
-    html.removeAttribute("data-theme");
-    themeBtn.textContent = "🌙";
-    localStorage.setItem("theme", "light");
-  } else {
-    html.setAttribute("data-theme", "dark");
-    themeBtn.textContent = "☀️";
-    localStorage.setItem("theme", "dark");
-  }
-}); */
 
  function syncCounters() {
   const rows = document.querySelectorAll("#tableBody tr");
@@ -390,12 +354,7 @@ function updateStats() {
   document.getElementById("goodCount").textContent = good;
   document.getElementById("badCount").textContent = bad;
   document.getElementById("bestCount").textContent = best;
- /* document.getElementById("total").textContent =
-    document.querySelectorAll("#tableBody tr").length;
-
-  document.getElementById("goodCount").textContent = good;
-  document.getElementById("badCount").textContent = bad;
-  document.getElementById("bestCount").textContent = best; */
+ 
 }
 
 // Menu de marcar a qualidade do take
@@ -703,14 +662,153 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   });
 }
 
+
 // FUNÇAO EXPORTAR PDF
 function exportPDF() {
-  const element = document.getElementById("tableBody");
+  const element = document.getElementById("boletimExport");
 
-  html2pdf()
-    .from(element)
-    .save("boletim.pdf");
+  // esconder UI
+  const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
+  ui.forEach(el => el.style.display = "none");
+
+  // mostrar observações reais
+  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
+  obsCells.forEach(td => {
+    if (td.dataset.obs) {
+      td.textContent = td.dataset.obs;
+    }
+  });
+
+  // abrir impressão
+  setTimeout(() => {
+    window.print();
+
+    // restaurar tudo depois
+    ui.forEach(el => el.style.display = "");
+    obsCells.forEach(td => {
+      td.textContent = td.dataset.obs ? "📝" : "";
+    });
+
+  }, 300);
 }
+/* function exportPDF() {
+  const element = document.getElementById("boletimExport");
+
+  // 🔥 GRADE
+  const gradeBtn = document.getElementById("gradeBtn");
+  const gradeInfo = document.createElement("div");
+
+  gradeInfo.textContent = "CÂMERA: " + gradeBtn.textContent;
+  gradeInfo.style.fontWeight = "bold";
+  gradeInfo.style.margin = "10px 0";
+
+  element.insertBefore(gradeInfo, element.firstChild);
+
+  // 🔥 esconder UI
+  const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
+  ui.forEach(el => el.style.display = "none");
+
+  // 🔥 observações
+  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
+  obsCells.forEach(td => {
+    if (td.dataset.obs) {
+      td.textContent = td.dataset.obs;
+    }
+  });
+
+  // 🔥 tabela
+  const tableContainer = document.querySelector(".table-container");
+  const originalOverflow = tableContainer.style.overflow;
+  const originalHeight = tableContainer.style.height;
+
+  tableContainer.style.overflow = "visible";
+  tableContainer.style.height = "auto";
+
+  // 🔥 HEADER
+  const header = document.querySelector(".header");
+  const groups = document.querySelectorAll(".header-group");
+  const headerItems = document.querySelectorAll(".header-group div");
+
+  const originalDisplay = header.style.display;
+  const originalFlexWrap = header.style.flexWrap;
+  const originalGap = header.style.gap;
+
+  // 👉 compactar + organizar
+  header.style.display = "flex";
+  header.style.flexWrap = "wrap";
+  header.style.gap = "2px";
+
+  groups.forEach(group => {
+    group.style.flex = "1 1 180px";
+    group.style.gap = "1px";
+    group.style.margin = "0";
+  });
+
+  headerItems.forEach(item => {
+    item.style.whiteSpace = "nowrap";
+    item.style.margin = "0";
+    item.style.lineHeight = "1.1";
+  });
+
+    // 🔥 salvar tamanho atual
+    const originalFont = element.style.fontSize;
+    const originalWidth = element.style.width;
+
+    // 🔥 compactar tudo
+    element.style.fontSize = "12px";
+    element.style.width = "1120px";
+  // 🔥 PDF
+  html2pdf()
+    .set({
+      margin: 5,
+      filename: `boletim_${document.getElementById("filme").textContent || "sem_nome"}.pdf`,
+      html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
+      jsPDF: { orientation: "landscape", unit: "mm", format: "a4" },
+      pagebreak: { mode: ['css', 'legacy'] }
+    })
+    .from(element)
+    .save()
+    .finally(() => {
+
+      // 🔥 restaurar tamanho
+      element.style.fontSize = originalFont;
+      element.style.width = originalWidth;
+
+      // 🔥 restaurar header
+      header.style.display = "flex";
+      header.style.flexWrap = "wrap";
+      header.style.gap = "2px";
+      header.style.fontSize = "11px"; // 🔥 essencial
+
+      groups.forEach(group => {
+        group.style.flex = "1 1 140px"; // 🔥 menor = menos espaço
+        group.style.gap = "1px";
+        group.style.margin = "0";
+      });
+
+      headerItems.forEach(item => {
+        item.style.whiteSpace = "nowrap";
+        item.style.margin = "0";
+        item.style.lineHeight = "1.1"; // 🔥 mais compacto
+      });
+
+      // 🔥 restaurar UI
+      ui.forEach(el => el.style.display = "");
+
+      // 🔥 restaurar observações
+      obsCells.forEach(td => {
+        td.textContent = td.dataset.obs ? "📝" : "";
+      });
+
+      // 🔥 restaurar tabela
+      tableContainer.style.overflow = originalOverflow;
+      tableContainer.style.height = originalHeight;
+
+      // 🔥 remover grade
+      gradeInfo.remove();
+    });
+} */
+
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
@@ -728,17 +826,56 @@ function exportImage() {
 function saveProject() {
   const data = localStorage.getItem("boletim");
 
+  let folders = JSON.parse(localStorage.getItem("folders")) || [];
+
+  const semana = prompt("Semana (1, 2, 3...)");
+
+  if (!semana) return;
+
+  const nomePasta = "Semana " + semana;
+
+  let pasta = folders.find(f => f.nome === nomePasta);
+
+  if (!pasta) {
+    pasta = {
+      nome: nomePasta,
+      boletins: []
+    };
+    folders.push(pasta);
+  }
+
+  const agora = new Date();
+
+  pasta.boletins.push({
+    nome: "Boletim - " + agora.toLocaleDateString("pt-BR"),
+    data: JSON.parse(data),
+    dataCriacao: agora.toISOString()
+  });
+
+  localStorage.setItem("folders", JSON.stringify(folders));
+
+  alert("Salvo em " + nomePasta);
+}
+/*function saveProject() {
+  const data = localStorage.getItem("boletim");
+
   let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
-  projects.push({
-    name: "Projeto " + new Date().toLocaleString(),
-    data: JSON.parse(data)
+  const agora = new Date();
+
+    projects.push({
+    nome: "Boletim - " + agora.toLocaleDateString("pt-BR"),
+    data: JSON.parse(data),
+    dataCriacao: agora.toISOString(),
+    pdf: `boletim_${agora.getTime()}.pdf`
   });
+ 
 
   localStorage.setItem("projects", JSON.stringify(projects));
 
-  alert("Projeto salvo!");
-}
+  alert("Boletim salvo!");
+} */
+
 
 // COMPARTILHAR
 function shareData() {

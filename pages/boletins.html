@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletins</title>
+    <script>
+    const temaSalvo = localStorage.getItem("theme");
+    if (temaSalvo === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+    </script>
+    <link rel="stylesheet" href="../css/boletins.css">
+</head>
+<body>
+<header>
+  <button class="back-btn" onclick="history.back()">⬅️</button>
+  <h1>Boletins</h1>
+</header>
+
+<main class="container">
+  <div id="listaBoletins" class="cards"></div>
+</main>
+<div class="buttons">
+  <button class="btn-new" onclick="novaPasta()">➕ Nova Pasta</button>
+  <button id="deleteFolderBtn" class="btn-delete">🗑️</button>
+</div>
+
+<script src="../js/theme.js"></script>
+<script src="../js/boletins.js"></script>
+</body>
+</html>

@@ -581,3 +581,56 @@ status de marcar boa, ruin ou melhor*/
 #gradeBtn.grade-D {
   color: gold;
 }
+/* para imprimir PDF*/
+@media print {
+  .header {
+    gap: 4px !important;           /* diminui espaço entre blocos */
+    font-size: 12px !important;    /* reduz tamanho geral */
+  }
+
+  .header-group {
+     gap: 2px !important;           /* espaço interno menor */
+    margin: 0 !important;
+  }
+  .header-group div {
+    margin: 0 !important;
+    line-height: 1.1 !important;   /* altura das linhas menor */
+  }
+  .header div {
+    white-space: nowrap; /* 🔥 evita quebra feia */
+  }
+
+   body {
+    margin: 0;
+    background: white;
+  }
+
+  .actions,
+  #exportMenu,
+  .back-btn,
+  #toggleHeader {
+    display: none !important;
+  }
+
+  #boletimExport {
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

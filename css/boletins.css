@@ -1,0 +1,187 @@
+:root {
+  --bg: #ffffff;
+  --text: #111;
+  --card-bg: #f5f5f5;
+}
+
+[data-theme="dark"] {
+  --bg: #111;
+  --text: #fff;
+  --card-bg: #1e1e1e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-bottom: 100px;
+  
+  height: 60px;
+  background: var(--card);
+  box-shadow: 0 2px 5px rgb(180 172 172 / 28%);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 26px;
+  padding-top: 29px;
+}
+.container {
+  padding: 20px;
+}
+
+.back-btn {
+  position: absolute;
+  left: 15px;
+
+  width: 50px;
+  height: 0px;
+  background: none;
+  border: none;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  padding: 8px;
+  border-radius: 50%;
+
+  transition: 0.3s;
+}
+
+/* efeito ao passar o mouse */
+.back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+/* efeito ao clicar */
+.back-btn:active {
+  transform: scale(0.95);
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* CARD */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+/* TÍTULO */
+.card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* DATA */
+.card p {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.card.active {
+  border: 2px solid #4caf50;
+}
+
+.card-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.card-actions button {
+  border: none;
+  background: var(--card-bg);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.card-actions button:hover {
+  transform: scale(1.1);
+}
+
+/* 🗑️ botão apagar pasta */
+.btn-delete {
+  margin: 10px;
+  padding: 10px 14px;
+  background: #e53935; /* vermelho mais bonito */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: 0.3s ease;
+
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+/* efeito hover */
+.btn-delete:hover {
+  background: #c62828;
+  transform: scale(1.05);
+}
+
+/* clique */
+.btn-delete:active {
+  transform: scale(0.95);
+}
+
+/* ➕ botão nova pasta */
+.btn-new {
+  margin: 10px;
+  padding: 10px 16px;
+  background: #4caf50; /* verde */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+/* hover */
+.btn-new:hover {
+  background: #388e3c;
+  transform: scale(1.05);
+}
+
+/* clique */
+.btn-new:active {
+  transform: scale(0.95);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin: 10px;
+}
