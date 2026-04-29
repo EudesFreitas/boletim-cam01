@@ -94,7 +94,7 @@ function apagarPasta() {
 
   alert("Pasta apagada!");
 
-  window.location.href = "/pages/boletins.html";
+  window.location.href = "boletins.html";
 }
 
 const btn = document.getElementById("deleteFolderBtn");
