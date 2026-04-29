@@ -847,34 +847,20 @@ function saveProject() {
   const agora = new Date();
 
   pasta.boletins.push({
+  titulo: "Boletim - " + agora.toLocaleDateString("pt-BR"),
+  conteudo: JSON.parse(data),
+  data: agora.toLocaleString()
+});
+  /*pasta.boletins.push({
     nome: "Boletim - " + agora.toLocaleDateString("pt-BR"),
     data: JSON.parse(data),
     dataCriacao: agora.toISOString()
-  });
+  }); */
 
   localStorage.setItem("folders", JSON.stringify(folders));
 
   alert("Salvo em " + nomePasta);
 }
-/*function saveProject() {
-  const data = localStorage.getItem("boletim");
-
-  let projects = JSON.parse(localStorage.getItem("projects")) || [];
-
-  const agora = new Date();
-
-    projects.push({
-    nome: "Boletim - " + agora.toLocaleDateString("pt-BR"),
-    data: JSON.parse(data),
-    dataCriacao: agora.toISOString(),
-    pdf: `boletim_${agora.getTime()}.pdf`
-  });
- 
-
-  localStorage.setItem("projects", JSON.stringify(projects));
-
-  alert("Boletim salvo!");
-} */
 
 
 // COMPARTILHAR

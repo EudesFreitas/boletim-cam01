@@ -30,7 +30,8 @@ function renderPastas() {
 //📂 ABRIR PASTA
 function abrirPasta(index) {
   localStorage.setItem("pastaAtual", index);
-  window.location.href = "boletins.html";
+  window.location.href = "pasta.html";
+  //window.location.href = "boletins.html";
 }
 //➕ CRIAR PASTA
 function criarPasta(nome) {
