@@ -32,27 +32,20 @@ display: flex;
 main {
   padding-top: 120px;
 }
+h1 {
+  font-size: 40px;
+  padding-top: 90px;
+}
 .card {
-  /*background: var(--card);
-  color: var(--text);
-  border-radius: 10px;
-  padding: 15px;
-  margin: 10px 0;
+  background: var(--card-bg);
+  font-size: 30px;
+  border-radius: 16px;
+  padding: 40px 70px 60px 70px;
+  margin: 0px 70px 0px 70px;
+  height: 40px;
+  box-shadow: 0 4px 12px rgb(47 46 46 / 39%);
   cursor: pointer;
-
-  /* animação suave 
-  transition: all 0.3s ease; */
-
-  
-    background: var(--card-bg);
-    font-size: 30px;
-    border-radius: 16px;
-    padding: 40px 70px 40px 70px;
-    margin: 0px 70px 0px 70px;
-    height: 40px;
-    box-shadow: 0 4px 12px rgb(47 46 46 / 39%);
-    cursor: pointer;
-    transition: 0.2s;
+  transition: 0.2s;
 }
 
 /* ✨ efeito ao passar o mouse */
@@ -93,10 +86,11 @@ main {
   border: none; */
   background: rgba(255, 0, 0, 0.54);
   border-radius: 5px;
-  padding: 6px 10px;
-  margin-left: 795px;
-  font-size: 20px;
+  padding: 8px 11px;
+  /*margin-left: 795px;*/
+  font-size: 30px;
   cursor: pointer;
+  position: relative;
 
   /*opacity: 0; */
   opacity: 1,6;
