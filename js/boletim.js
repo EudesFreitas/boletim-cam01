@@ -812,6 +812,48 @@ function exportPDF() {
     });
 } */
 
+// compartilhar PDF.
+async function sharePDF() {
+  const element = document.getElementById("boletimExport");
+
+  // 🔥 gera o PDF como blob
+  const opt = {
+    margin: 5,
+    filename: "boletim.pdf",
+    html2canvas: { scale: 2 },
+    jsPDF: { orientation: "landscape" }
+  };
+
+  const worker = html2pdf().set(opt).from(element);
+
+  const pdfBlob = await worker.outputPdf("blob");
+
+  const file = new File([pdfBlob], "boletim.pdf", {
+    type: "application/pdf"
+  });
+
+  // 🚀 tenta compartilhar
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Boletim de Filmagem 🎬",
+        text: "Segue o boletim",
+        files: [file]
+      });
+    } catch (err) {
+      console.log("Erro ao compartilhar:", err);
+    }
+  } else {
+    // 🔥 fallback: baixa o PDF
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "boletim.pdf";
+    a.click();
+
+    alert("Seu navegador não suporta compartilhamento direto. PDF baixado.");
+  }
+}
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
