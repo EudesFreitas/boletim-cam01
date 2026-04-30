@@ -17,16 +17,42 @@ body {
   color: var(--text);
   transition: all 0.3s ease;
 }
-.card {
+header {
+display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-bottom: 91px;
+  margin: -8px;
+  
+  height: 60px;
   background: var(--card);
+  box-shadow: 0 2px 5px rgb(180 172 172 / 28%);
+}
+main {
+  padding-top: 120px;
+}
+.card {
+  /*background: var(--card);
   color: var(--text);
   border-radius: 10px;
   padding: 15px;
   margin: 10px 0;
   cursor: pointer;
 
-  /* animação suave */
-  transition: all 0.3s ease;
+  /* animação suave 
+  transition: all 0.3s ease; */
+
+  
+    background: var(--card-bg);
+    font-size: 30px;
+    border-radius: 16px;
+    padding: 40px 70px 40px 70px;
+    margin: 0px 70px 0px 70px;
+    height: 40px;
+    box-shadow: 0 4px 12px rgb(47 46 46 / 39%);
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 /* ✨ efeito ao passar o mouse */
@@ -67,8 +93,9 @@ body {
   border: none; */
   background: rgba(255, 0, 0, 0.54);
   border-radius: 5px;
-  padding: 4px 8px;
-  font-size: 18px;
+  padding: 6px 10px;
+  margin-left: 795px;
+  font-size: 20px;
   cursor: pointer;
 
   /*opacity: 0; */
@@ -83,4 +110,24 @@ body {
 
 .delete-btn:active {
   transform: scale(0.9);
+}
+
+button {
+  position: absolute;
+  left: 15px;
+
+  width: 50px;
+  /*height: 0px; */
+  background: none;
+  border: none;
+
+  font-size: 51px;
+  cursor: pointer;
+
+  padding: 28px;
+  padding-left: 59px;
+  padding-top: 130px;
+  border-radius: 50%;
+
+  transition: 0.3s;
 }
