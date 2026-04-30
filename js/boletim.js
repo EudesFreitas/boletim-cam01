@@ -816,6 +816,48 @@ function exportPDF() {
 async function sharePDF() {
   const element = document.getElementById("boletimExport");
 
+  // 🔥 ESCONDE MENU
+  const menu = document.getElementById("exportMenu");
+  if (menu) menu.style.display = "none";
+
+  const opt = {
+    margin: 5,
+    filename: "boletim.pdf",
+    html2canvas: { scale: 2 },
+    jsPDF: { orientation: "landscape" }
+  };
+
+  const worker = html2pdf().set(opt).from(element);
+  const pdfBlob = await worker.outputPdf("blob");
+
+  // 🔥 VOLTA MENU
+  if (menu) menu.style.display = "";
+
+  const file = new File([pdfBlob], "boletim.pdf", {
+    type: "application/pdf"
+  });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Boletim 🎬",
+        text: "Segue o boletim",
+        files: [file]
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "boletim.pdf";
+    a.click();
+  }
+}
+/*async function sharePDF() {
+  const element = document.getElementById("boletimExport");
+
   // 🔥 gera o PDF como blob
   const opt = {
     margin: 5,
@@ -853,7 +895,7 @@ async function sharePDF() {
 
     alert("Seu navegador não suporta compartilhamento direto. PDF baixado.");
   }
-}
+} */
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
