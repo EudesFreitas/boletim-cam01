@@ -870,6 +870,25 @@ function saveProject() {
 // COMPARTILHAR
 function shareData() {
   const text = "Confira meu boletim de filmagem 🎬";
+  const url = window.location.href;
+
+  if (navigator.share) {
+    navigator.share({
+      title: "Boletim de Filmagem",
+      text: text,
+      url: url
+    })
+    .then(() => console.log("Compartilhado com sucesso"))
+    .catch((error) => console.log("Erro ao compartilhar:", error));
+    
+  } else {
+    // 🔥 fallback (funciona em qualquer lugar)
+    navigator.clipboard.writeText(url);
+    alert("Link copiado para a área de transferência!");
+  }
+}
+/*function shareData() {
+  const text = "Confira meu boletim de filmagem 🎬";
 
   if (navigator.share) {
     navigator.share({
@@ -879,7 +898,7 @@ function shareData() {
   } else {
     alert("Compartilhamento não suportado nesse dispositivo");
   }
-}
+} */
 
 // MENU EXPORTAR (versão com animação)
 const exportBtn = document.getElementById("exportBtn");
