@@ -20,7 +20,8 @@ header {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-bottom: 100px;
+  padding-bottom: 0px;
+  margin: -8px;
   
   height: 60px;
   background: var(--card);
@@ -29,11 +30,12 @@ header {
 
 header h1 {
   margin: 0;
-  font-size: 26px;
-  padding-top: 29px;
+  font-size: 17px;
+  padding-top: 13px;
+  padding-bottom: 19px;
 }
 .container {
-  padding: 20px;
+  padding: 30px 21px 24px 17px;
 }
 
 .back-btn {
@@ -41,7 +43,7 @@ header h1 {
   left: 15px;
 
   width: 50px;
-  height: 0px;
+  /*height: 0px; */
   background: none;
   border: none;
 
@@ -68,7 +70,7 @@ header h1 {
 .cards {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 /* CARD */
@@ -76,6 +78,7 @@ header h1 {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 16px;
+  height: 40px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: 0.2s;
@@ -140,7 +143,7 @@ header h1 {
   align-items: center;
   justify-content: center;
 
-  position: fixed;
+  /*position: fixed;*/
   bottom: 20px;
   right: 20px;
 }
@@ -159,13 +162,13 @@ header h1 {
 /* ➕ botão nova pasta */
 .btn-new {
   margin: 10px;
-  padding: 10px 16px;
+  padding: 10px 14px;
   background: #4caf50; /* verde */
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
   transition: 0.3s ease;
 }
 
@@ -182,6 +185,7 @@ header h1 {
 
 .buttons {
   display: flex;
-  gap: 10px;
+  gap: 30px;
   margin: 10px;
+  padding-left: 170px;
 }

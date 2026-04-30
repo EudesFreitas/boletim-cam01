@@ -22,7 +22,10 @@ if (!savedHeader.data) {
 }
 
 // carregar dados salvos
-const savedData = JSON.parse(localStorage.getItem("boletim")) || [];
+const rawData = localStorage.getItem("boletim");
+const savedData = rawData ? JSON.parse(rawData) : [];
+// a causa de ter quebrado o codigo
+//const savedData = JSON.parse(localStorage.getItem("boletim")) || [];
 
 // função para criar linha
 function createRow(data = []) {
@@ -848,7 +851,8 @@ function saveProject() {
 
   pasta.boletins.push({
   titulo: "Boletim - " + agora.toLocaleDateString("pt-BR"),
-  conteudo: JSON.parse(data),
+  conteudo: data ? JSON.parse(data) : [],
+  //conteudo: JSON.parse(data),
   data: agora.toLocaleString()
 });
   /*pasta.boletins.push({
