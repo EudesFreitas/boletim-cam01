@@ -97,6 +97,12 @@ td {
 td, th {
   text-align: center;
   border: 1px solid var(--border);
+
+  /* OBS TESTE*/
+  white-space: normal !important;
+  word-break: break-word;
+  font-size: 10px;
+  padding: 4px;
 }
 tbody tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.03);

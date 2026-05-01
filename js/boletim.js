@@ -668,7 +668,9 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
 
 // FUNÇAO EXPORTAR PDF
 function exportPDF() {
-  const element = document.getElementById("boletimExport");
+  // testes
+  const element = document.querySelector("body");
+  //const element = document.getElementById("boletimExport");
 
   // 🔥 AJUSTE DA TABELA
   const table = document.querySelector("table");
@@ -690,8 +692,27 @@ function exportPDF() {
     }
   });
 
+  element.style.width = "1200px";
+
   // 🚀 GERAR PDF (AQUI É O CERTO)
   html2pdf()
+  .set({
+    margin: 5,
+    filename: "boletim.pdf",
+    html2canvas: { 
+      scale: 2, 
+      scrollY: 0 
+    },
+    jsPDF: { 
+      orientation: "landscape", 
+      unit: "mm", 
+      format: "a4" 
+    }
+  })
+  .from(element)
+  .save()
+  .finally(() => {
+  /*html2pdf()
     .set({
       margin: 5,
       filename: "boletim.pdf",
@@ -708,7 +729,7 @@ function exportPDF() {
     })
     .from(element)
     .save()
-    .finally(() => {
+    .finally(() => { */
 
       // 🔄 restaurar UI
       ui.forEach(el => el.style.display = "");
@@ -759,7 +780,7 @@ table.style.fontSize = "10px";
     });
 
   }, 300);
-}
+} */
 
 
 // compartilhar PDF.
@@ -814,7 +835,7 @@ async function sharePDF() {
     a.click();
   }
 }
-*/
+
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
