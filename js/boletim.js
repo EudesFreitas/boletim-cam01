@@ -670,6 +670,72 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
 function exportPDF() {
   const element = document.getElementById("boletimExport");
 
+  // 🔥 AJUSTE DA TABELA
+  const table = document.querySelector("table");
+  const originalWidth = table.style.width;
+  const originalFont = table.style.fontSize;
+
+  table.style.width = "100%";
+  table.style.fontSize = "10px";
+
+  // 🔥 esconder UI
+  const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
+  ui.forEach(el => el.style.display = "none");
+
+  // 🔥 mostrar observações completas
+  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
+  obsCells.forEach(td => {
+    if (td.dataset.obs) {
+      td.textContent = td.dataset.obs;
+    }
+  });
+
+  // 🚀 GERAR PDF (AQUI É O CERTO)
+  html2pdf()
+    .set({
+      margin: 5,
+      filename: "boletim.pdf",
+      html2canvas: { 
+        scale: 3, 
+        useCORS: true 
+      },
+      jsPDF: { 
+        orientation: "landscape", 
+        unit: "mm", 
+        format: "a4" 
+      },
+      pagebreak: { mode: ['css', 'legacy'] }
+    })
+    .from(element)
+    .save()
+    .finally(() => {
+
+      // 🔄 restaurar UI
+      ui.forEach(el => el.style.display = "");
+
+      // 🔄 restaurar observações
+      obsCells.forEach(td => {
+        td.textContent = td.dataset.obs ? "📝" : "";
+      });
+
+      // 🔄 restaurar tabela
+      table.style.width = originalWidth;
+      table.style.fontSize = originalFont;
+    });
+}
+
+/* function exportPDF() {
+  const element = document.getElementById("boletimExport");
+
+//OBS TESTE
+const table = document.querySelector("table");
+const originalWidth = table.style.width;
+const originalFont = table.style.fontSize;
+
+// 🔥 força caber na página
+table.style.width = "100%";
+table.style.fontSize = "10px";
+
   // esconder UI
   const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
   ui.forEach(el => el.style.display = "none");
@@ -694,123 +760,7 @@ function exportPDF() {
 
   }, 300);
 }
-/* function exportPDF() {
-  const element = document.getElementById("boletimExport");
 
-  // 🔥 GRADE
-  const gradeBtn = document.getElementById("gradeBtn");
-  const gradeInfo = document.createElement("div");
-
-  gradeInfo.textContent = "CÂMERA: " + gradeBtn.textContent;
-  gradeInfo.style.fontWeight = "bold";
-  gradeInfo.style.margin = "10px 0";
-
-  element.insertBefore(gradeInfo, element.firstChild);
-
-  // 🔥 esconder UI
-  const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
-  ui.forEach(el => el.style.display = "none");
-
-  // 🔥 observações
-  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
-  obsCells.forEach(td => {
-    if (td.dataset.obs) {
-      td.textContent = td.dataset.obs;
-    }
-  });
-
-  // 🔥 tabela
-  const tableContainer = document.querySelector(".table-container");
-  const originalOverflow = tableContainer.style.overflow;
-  const originalHeight = tableContainer.style.height;
-
-  tableContainer.style.overflow = "visible";
-  tableContainer.style.height = "auto";
-
-  // 🔥 HEADER
-  const header = document.querySelector(".header");
-  const groups = document.querySelectorAll(".header-group");
-  const headerItems = document.querySelectorAll(".header-group div");
-
-  const originalDisplay = header.style.display;
-  const originalFlexWrap = header.style.flexWrap;
-  const originalGap = header.style.gap;
-
-  // 👉 compactar + organizar
-  header.style.display = "flex";
-  header.style.flexWrap = "wrap";
-  header.style.gap = "2px";
-
-  groups.forEach(group => {
-    group.style.flex = "1 1 180px";
-    group.style.gap = "1px";
-    group.style.margin = "0";
-  });
-
-  headerItems.forEach(item => {
-    item.style.whiteSpace = "nowrap";
-    item.style.margin = "0";
-    item.style.lineHeight = "1.1";
-  });
-
-    // 🔥 salvar tamanho atual
-    const originalFont = element.style.fontSize;
-    const originalWidth = element.style.width;
-
-    // 🔥 compactar tudo
-    element.style.fontSize = "12px";
-    element.style.width = "1120px";
-  // 🔥 PDF
-  html2pdf()
-    .set({
-      margin: 5,
-      filename: `boletim_${document.getElementById("filme").textContent || "sem_nome"}.pdf`,
-      html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
-      jsPDF: { orientation: "landscape", unit: "mm", format: "a4" },
-      pagebreak: { mode: ['css', 'legacy'] }
-    })
-    .from(element)
-    .save()
-    .finally(() => {
-
-      // 🔥 restaurar tamanho
-      element.style.fontSize = originalFont;
-      element.style.width = originalWidth;
-
-      // 🔥 restaurar header
-      header.style.display = "flex";
-      header.style.flexWrap = "wrap";
-      header.style.gap = "2px";
-      header.style.fontSize = "11px"; // 🔥 essencial
-
-      groups.forEach(group => {
-        group.style.flex = "1 1 140px"; // 🔥 menor = menos espaço
-        group.style.gap = "1px";
-        group.style.margin = "0";
-      });
-
-      headerItems.forEach(item => {
-        item.style.whiteSpace = "nowrap";
-        item.style.margin = "0";
-        item.style.lineHeight = "1.1"; // 🔥 mais compacto
-      });
-
-      // 🔥 restaurar UI
-      ui.forEach(el => el.style.display = "");
-
-      // 🔥 restaurar observações
-      obsCells.forEach(td => {
-        td.textContent = td.dataset.obs ? "📝" : "";
-      });
-
-      // 🔥 restaurar tabela
-      tableContainer.style.overflow = originalOverflow;
-      tableContainer.style.height = originalHeight;
-
-      // 🔥 remover grade
-      gradeInfo.remove();
-    });
-} */
 
 // compartilhar PDF.
 async function sharePDF() {
@@ -864,48 +814,7 @@ async function sharePDF() {
     a.click();
   }
 }
-/* async function sharePDF() {
-  const element = document.getElementById("boletimExport");
-
-  // 🔥 ESCONDE MENU
-  const menu = document.getElementById("exportMenu");
-  if (menu) menu.style.display = "none";
-
-  const opt = {
-    margin: 5,
-    filename: "boletim.pdf",
-    html2canvas: { scale: 2 },
-    jsPDF: { orientation: "landscape" }
-  };
-
-  const worker = html2pdf().set(opt).from(element);
-  const pdfBlob = await worker.outputPdf("blob");
-
-  // 🔥 VOLTA MENU
-  if (menu) menu.style.display = "";
-
-  const file = new File([pdfBlob], "boletim.pdf", {
-    type: "application/pdf"
-  });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        title: "Boletim 🎬",
-        text: "Segue o boletim",
-        files: [file]
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  } else {
-    const url = URL.createObjectURL(pdfBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "boletim.pdf";
-    a.click();
-  }
-} */
+*/
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
