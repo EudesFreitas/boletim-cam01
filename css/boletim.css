@@ -65,6 +65,7 @@ table {
   background: var(--card);
   width: 100%;
   border-collapse: collapse;
+  /*table-layout: fixed; OBS TESTE*/
 
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -87,6 +88,10 @@ th {
   z-index: 2;
   background: orange;  mantém visível */
 }
+/* 🔥 evita cortar linha no meio */
+tr {
+  page-break-inside: avoid;
+}
 
 td {
   border-bottom: 1px solid var(--border-color);
@@ -97,6 +102,7 @@ td {
 td, th {
   text-align: center;
   border: 1px solid var(--border);
+  
 
   /* OBS TESTE*/
   white-space: normal !important;
@@ -618,8 +624,14 @@ status de marcar boa, ruin ou melhor*/
     display: none !important;
   }
 
+  #printArea {
+  width: 297mm; /* A4 paisagem */
+  padding: 10mm;
+  
+}
   #boletimExport {
     width: 100%;
+    font-size: 11px;
   }
 
   table {
@@ -627,16 +639,20 @@ status de marcar boa, ruin ou melhor*/
     font-size: 12px;
   }
 
-  tr {
+  /*tr {
     page-break-inside: avoid;
   }
 
   thead {
     display: table-header-group;
-  }
+  }*/
 
   * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  .page-break {
+  page-break-before: always;
+}
 }
