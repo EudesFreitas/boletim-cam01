@@ -784,8 +784,40 @@ table.style.fontSize = "10px";
 
 
 // compartilhar PDF.
+// OBS TESTE
 async function sharePDF() {
+  const element = document.getElementById("printArea");
+
+  // 🔥 ativa modo exportação
+  document.body.classList.add("export-mode");
+
+  const pdfBlob = await html2pdf()
+    .set({
+      margin: 0,
+      filename: "boletim.pdf",
+      html2canvas: { scale: 2 },
+      jsPDF: { orientation: "landscape", format: "a4" }
+    })
+    .from(element)
+    .outputPdf("blob");
+
+  // 🔥 desativa modo exportação
+  document.body.classList.remove("export-mode");
+
+  const file = new File([pdfBlob], "boletim.pdf", {
+    type: "application/pdf"
+  });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: "Boletim 🎬",
+      files: [file]
+    });
+  }
+}
+/*async function sharePDF() {
   const element = document.getElementById("boletimExport");
+
 
   // 🔥 esconder menu
   const menu = document.getElementById("exportMenu");
@@ -835,7 +867,7 @@ async function sharePDF() {
     a.click();
   }
 }
-
+*/
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
