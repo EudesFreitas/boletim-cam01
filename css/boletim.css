@@ -602,7 +602,7 @@ status de marcar boa, ruin ou melhor*/
   display: none !important;
 }
 
-/* mostrar texto real no lugar do ícone */
+/* mostrar texto real no lugar do ícone 
 .export-mode td[data-obs]::after {
   content: attr(data-obs);
-}
+} */
