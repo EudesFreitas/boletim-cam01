@@ -784,8 +784,63 @@ table.style.fontSize = "10px";
 
 
 // compartilhar PDF.
-
 async function sharePDF() {
+  const element = document.getElementById("boletimExport");
+
+  // 🔥 ATIVA modo exportação
+  document.body.classList.add("export-mode");
+
+  const menu = document.getElementById("exportMenu");
+  if (menu) menu.style.display = "none";
+
+  // 🔥 OBS completa
+  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
+  obsCells.forEach(td => {
+    if (td.dataset.obs) {
+      td.textContent = td.dataset.obs;
+    }
+  });
+
+  const opt = {
+    margin: 5,
+    filename: "boletim.pdf",
+    html2canvas: { scale: 2 },
+    jsPDF: { orientation: "landscape", format: "a4" }
+  };
+
+  // 🚀 GERA PDF
+  const worker = html2pdf().set(opt).from(element);
+  const pdfBlob = await worker.outputPdf("blob");
+
+  // 🔥 AGORA SIM remove (DEPOIS!)
+  document.body.classList.remove("export-mode");
+
+  // 🔄 restaurar UI
+  if (menu) menu.style.display = "";
+
+  obsCells.forEach(td => {
+    td.textContent = td.dataset.obs ? "📝" : "";
+  });
+
+  const file = new File([pdfBlob], "boletim.pdf", {
+    type: "application/pdf"
+  });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: "Boletim 🎬",
+      text: "Segue o boletim",
+      files: [file]
+    });
+  } else {
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "boletim.pdf";
+    a.click();
+  }
+}
+/*async function sharePDF() {
   const element = document.getElementById("boletimExport");
 
    // OBS TESTE 🔥 ativa modo exportação
@@ -810,12 +865,12 @@ async function sharePDF() {
     html2canvas: { scale: 2 },
     jsPDF: { orientation: "landscape", format: "a4" }
   };
-
-  // OBS 🔥 desativa modo exportação
-  document.body.classList.remove("export-mode");
-
+  // GERA PDF
   const worker = html2pdf().set(opt).from(element);
   const pdfBlob = await worker.outputPdf("blob");
+
+   // OBS 🔥 desativa modo exportação
+  document.body.classList.remove("export-mode");
 
   // 🔥 restaurar observações (volta ícone)
   obsCells.forEach(td => {
@@ -843,7 +898,7 @@ async function sharePDF() {
     a.click();
   }
 }
-
+*/
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
