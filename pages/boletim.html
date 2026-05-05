@@ -46,7 +46,7 @@
       <div class="header-group">
         <div>SHUT: <span contenteditable="true" id="shutter"></span></div>
         <div>RES: <span contenteditable="true" id="resolucao"></span></div>
-        <div>CAM: <span contenteditable="true" id="cam"></span></div>
+        <!--<div>CAM: <span contenteditable="true" id="cam"></span></div> -->
         <div>CARD: <span contenteditable="true" id="card"></span></div>  
       </div>
     </div>
@@ -69,6 +69,13 @@
       <button onclick="exportImage()">🖼️ Imagem</button>
       <button onclick="saveProject()">📁 Salvar</button>
       <button onclick="shareData()">⤴️ Compartilhar</button>
+    </div>
+
+    <!-- “resumo para PDF” -->
+    <div id="pdfInfo" class="pdf-info">
+      <!-- <span><strong>Clipe:</strong> <span id="pdfClip"></span></span>
+      <span><strong>Take:</strong> <span id="pdfTake"></span></span> -->
+      <span><strong>CÂMERA:</strong> <span id="pdfGrade"></span></span>
     </div>
 
     <div class="stats">

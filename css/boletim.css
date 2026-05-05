@@ -606,3 +606,47 @@ status de marcar boa, ruin ou melhor*/
 .export-mode td[data-obs]::after {
   content: attr(data-obs);
 } */
+.pdf-info {
+  display: none;
+  font-weight: bold;
+  margin-bottom: 10px;
+  gap: 20px;
+
+  justify-content: center;
+  font-size: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+/* aparece só no export */
+.export-mode .pdf-info {
+  display: flex;
+}
+
+.export-mode .actions {
+  display: none !important;
+}
+
+/*.export-mode #boletimExport {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.export-mode table {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.export-mode td,
+.export-mode th {
+  color: #000 !important;
+  background: #fff !important;
+  border-color: #000 !important;
+}*/
+
+/* remove transparência 
+.export-mode {
+  --bg: #ffffff;
+  --text: #000000;
+   
+}*/

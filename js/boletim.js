@@ -6,8 +6,8 @@ const tbody = document.getElementById("tableBody");
 
 const headerFields = [
   "filme", "data", "foto", "produtora",
-  "iso", "wb", "fps", "shutter", "resolucao", "card", "cam"
-];
+  "iso", "wb", "fps", "shutter", "resolucao", "card", 
+]; //"cam"
 
 const savedHeader = JSON.parse(localStorage.getItem("headerBoletim")) || {};
 
@@ -691,6 +691,14 @@ function exportPDF() {
     }
   });
 
+  // 🔥 ativa modo exportação
+  document.body.classList.add("export-mode");
+
+  // pegar valores atuais e mostra no PDF
+  //document.getElementById("pdfClip").textContent = clipCounter;
+  //document.getElementById("pdfTake").textContent = takeCounter;
+  document.getElementById("pdfGrade").textContent = gradeBtn.textContent;
+
   setTimeout(() => {
     html2pdf()
       .set({
@@ -725,53 +733,51 @@ function exportPDF() {
 
         // 🔄 restaurar largura
         element.style.width = originalElementWidth;
+
+        document.body.classList.remove("export-mode");
       });
-
-  }, 100);
+      
+      
+       
+  }, 100)
 }
+//}, 50);
 
-/* function exportPDF() {
+// 🔥 força o navegador a redesenhar
+     // document.body.offsetHeight;
+
+
+
+// compartilhar PDF.
+  async function sharePDF() {
   const element = document.getElementById("boletimExport");
 
-//OBS TESTE
-const table = document.querySelector("table");
-const originalWidth = table.style.width;
-const originalFont = table.style.fontSize;
+  const originalWidth = element.style.width;
+  element.style.width = "280mm";
 
-// 🔥 força caber na página
-table.style.width = "100%";
-table.style.fontSize = "10px";
+  // 🔥 ativa modo exportação (UMA VEZ só)
+  document.body.classList.add("export-mode");
 
-  // esconder UI
-  const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
-  ui.forEach(el => el.style.display = "none");
+  // 🔥 preenche info do PDF (UMA VEZ só)
+  const gradeEl = document.getElementById("pdfGrade");
+  if (gradeEl) {
+    gradeEl.textContent = gradeBtn.textContent;
+  }
 
-  // mostrar observações reais
+  await new Promise(r => setTimeout(r, 100));
+
+  const menu = document.getElementById("exportMenu");
+  if (menu) menu.style.display = "none";
+
+  // 🔥 OBS (isso sim fica no loop)
   const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
   obsCells.forEach(td => {
     if (td.dataset.obs) {
       td.textContent = td.dataset.obs;
     }
   });
-
-  // abrir impressão
-  setTimeout(() => {
-    window.print();
-
-    // restaurar tudo depois
-    ui.forEach(el => el.style.display = "");
-    obsCells.forEach(td => {
-      td.textContent = td.dataset.obs ? "📝" : "";
-    });
-
-  }, 300);
-} */
-
-
-// compartilhar PDF.
-async function sharePDF() {
+/*async function sharePDF() {
   const element = document.getElementById("boletimExport");
-  //const element = document.getElementById("printArea");
 
   const originalWidth = element.style.width;
   element.style.width = "280mm";
@@ -788,7 +794,11 @@ async function sharePDF() {
     if (td.dataset.obs) {
       td.textContent = td.dataset.obs;
     }
-  });
+  // 🔥 ativa modo exportação
+  document.body.classList.add("export-mode");
+  document.getElementById("pdfGrade").textContent = gradeBtn.textContent;
+  }); */
+
 
   const opt = {
     margin: 5,
@@ -838,65 +848,6 @@ async function sharePDF() {
     a.click();
   }
 }
-/*async function sharePDF() {
-  const element = document.getElementById("boletimExport");
-
-   // OBS TESTE 🔥 ativa modo exportação
-  document.body.classList.add("export-mode");
-
-
-  // 🔥 esconder menu
-  const menu = document.getElementById("exportMenu");
-  if (menu) menu.style.display = "none";
-
-  // 🔥 mostrar texto real das observações
-  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
-  obsCells.forEach(td => {
-    if (td.dataset.obs) {
-      td.textContent = td.dataset.obs;
-    }
-  });
-
-  const opt = {
-    margin: 5,
-    filename: "boletim.pdf",
-    html2canvas: { scale: 2 },
-    jsPDF: { orientation: "landscape", format: "a4" }
-  };
-  // GERA PDF
-  const worker = html2pdf().set(opt).from(element);
-  const pdfBlob = await worker.outputPdf("blob");
-
-   // OBS 🔥 desativa modo exportação
-  document.body.classList.remove("export-mode");
-
-  // 🔥 restaurar observações (volta ícone)
-  obsCells.forEach(td => {
-    td.textContent = td.dataset.obs ? "📝" : "";
-  });
-
-  // 🔥 voltar menu
-  if (menu) menu.style.display = "";
-
-  const file = new File([pdfBlob], "boletim.pdf", {
-    type: "application/pdf"
-  });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({
-      title: "Boletim 🎬",
-      text: "Segue o boletim",
-      files: [file]
-    });
-  } else {
-    const url = URL.createObjectURL(pdfBlob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "boletim.pdf";
-    a.click();
-  }
-}
-*/
 
 // FUNÇAO EXPORTAR IMAGEM
 function exportImage() {
