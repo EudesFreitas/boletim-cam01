@@ -64,7 +64,7 @@ h3 {
 table {
   background: var(--card);
   width: 100%;
-  min-width: 411px; /* ou 1000px */
+  min-width: 490px; /* ou 1000px */
   border-collapse: collapse;
   table-layout: fixed; /*OBS TESTE*/
 
@@ -111,8 +111,10 @@ td, th {
   word-break: break-word;
   font-size: 10px;
   /*padding: 4px;*/
-  padding: 10px;
+  padding: 14px 10px; /* ↑ aumenta altura */
   min-height: 45px;
+  
+  line-height: 1.4;
 }
 tbody tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.03);
