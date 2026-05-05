@@ -64,7 +64,7 @@ h3 {
 table {
   background: var(--card);
   width: 100%;
-  min-width: 900px; /* ou 1000px */
+  min-width: 411px; /* ou 1000px */
   border-collapse: collapse;
   table-layout: fixed; /*OBS TESTE*/
 
