@@ -65,7 +65,7 @@ table {
   background: var(--card);
   width: 100%;
   border-collapse: collapse;
-  /*table-layout: fixed; OBS TESTE*/
+  table-layout: fixed; /*OBS TESTE*/
 
   border: 1px solid var(--border-color);
   border-radius: 10px;

@@ -668,11 +668,12 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
 
 // FUNÇAO EXPORTAR PDF
 function exportPDF() {
-  // testes
-  const element = document.querySelector("body");
-  //const element = document.getElementById("boletimExport");
+  const element = document.getElementById("boletimExport");
+  //const element = document.getElementById("printArea");
 
-  // 🔥 AJUSTE DA TABELA
+  const originalElementWidth = element.style.width;
+  element.style.width = "280mm";
+
   const table = document.querySelector("table");
   const originalWidth = table.style.width;
   const originalFont = table.style.fontSize;
@@ -680,11 +681,9 @@ function exportPDF() {
   table.style.width = "100%";
   table.style.fontSize = "10px";
 
-  // 🔥 esconder UI
   const ui = document.querySelectorAll(".actions, #exportMenu, .back-btn");
   ui.forEach(el => el.style.display = "none");
 
-  // 🔥 mostrar observações completas
   const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
   obsCells.forEach(td => {
     if (td.dataset.obs) {
@@ -692,57 +691,43 @@ function exportPDF() {
     }
   });
 
-  element.style.width = "1200px";
+  setTimeout(() => {
+    html2pdf()
+      .set({
+        margin: 5,
+        filename: "boletim.pdf",
+        html2canvas: { 
+          scale: window.innerWidth < 768 ? 3 : 2,
+          useCORS: true,
+          scrollY: 0
+        },
+        jsPDF: { 
+          orientation: "landscape", 
+          unit: "mm", 
+          format: "a4" 
+        }
+      })
+      .from(element)
+      .save()
+      .finally(() => {
 
-  // 🚀 GERAR PDF (AQUI É O CERTO)
-  html2pdf()
-  .set({
-    margin: 5,
-    filename: "boletim.pdf",
-    html2canvas: { 
-      scale: 2, 
-      scrollY: 0 
-    },
-    jsPDF: { 
-      orientation: "landscape", 
-      unit: "mm", 
-      format: "a4" 
-    }
-  })
-  .from(element)
-  .save()
-  .finally(() => {
-  /*html2pdf()
-    .set({
-      margin: 5,
-      filename: "boletim.pdf",
-      html2canvas: { 
-        scale: 3, 
-        useCORS: true 
-      },
-      jsPDF: { 
-        orientation: "landscape", 
-        unit: "mm", 
-        format: "a4" 
-      },
-      pagebreak: { mode: ['css', 'legacy'] }
-    })
-    .from(element)
-    .save()
-    .finally(() => { */
+        // 🔄 restaurar UI
+        ui.forEach(el => el.style.display = "");
 
-      // 🔄 restaurar UI
-      ui.forEach(el => el.style.display = "");
+        // 🔄 restaurar observações
+        obsCells.forEach(td => {
+          td.textContent = td.dataset.obs ? "📝" : "";
+        });
 
-      // 🔄 restaurar observações
-      obsCells.forEach(td => {
-        td.textContent = td.dataset.obs ? "📝" : "";
+        // 🔄 restaurar tabela
+        table.style.width = originalWidth;
+        table.style.fontSize = originalFont;
+
+        // 🔄 restaurar largura
+        element.style.width = originalElementWidth;
       });
 
-      // 🔄 restaurar tabela
-      table.style.width = originalWidth;
-      table.style.fontSize = originalFont;
-    });
+  }, 100);
 }
 
 /* function exportPDF() {
@@ -786,14 +771,18 @@ table.style.fontSize = "10px";
 // compartilhar PDF.
 async function sharePDF() {
   const element = document.getElementById("boletimExport");
+  //const element = document.getElementById("printArea");
 
-  // 🔥 ATIVA modo exportação
+  const originalWidth = element.style.width;
+  element.style.width = "280mm";
+
   document.body.classList.add("export-mode");
+
+  await new Promise(r => setTimeout(r, 100)); // 🔥
 
   const menu = document.getElementById("exportMenu");
   if (menu) menu.style.display = "none";
 
-  // 🔥 OBS completa
   const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
   obsCells.forEach(td => {
     if (td.dataset.obs) {
@@ -804,23 +793,32 @@ async function sharePDF() {
   const opt = {
     margin: 5,
     filename: "boletim.pdf",
-    html2canvas: { scale: 2 },
-    jsPDF: { orientation: "landscape", format: "a4" }
+    html2canvas: { 
+      scale: window.innerWidth < 768 ? 3 : 2,
+      useCORS: true,
+      scrollY: 0 // 🔥 ADICIONA ISSO
+    },
+    jsPDF: { 
+      orientation: "landscape", 
+      unit: "mm",
+      format: "a4"
+    }
   };
 
-  // 🚀 GERA PDF
-  const worker = html2pdf().set(opt).from(element);
-  const pdfBlob = await worker.outputPdf("blob");
+  const pdfBlob = await html2pdf()
+    .set(opt)
+    .from(element)
+    .outputPdf("blob");
 
-  // 🔥 AGORA SIM remove (DEPOIS!)
   document.body.classList.remove("export-mode");
 
-  // 🔄 restaurar UI
   if (menu) menu.style.display = "";
 
   obsCells.forEach(td => {
     td.textContent = td.dataset.obs ? "📝" : "";
   });
+
+  element.style.width = originalWidth;
 
   const file = new File([pdfBlob], "boletim.pdf", {
     type: "application/pdf"
