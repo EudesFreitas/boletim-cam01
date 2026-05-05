@@ -64,6 +64,7 @@ h3 {
 table {
   background: var(--card);
   width: 100%;
+  min-width: 900px; /* ou 1000px */
   border-collapse: collapse;
   table-layout: fixed; /*OBS TESTE*/
 
@@ -95,6 +96,7 @@ tr {
 
 td {
   border-bottom: 1px solid var(--border-color);
+  white-space: nowrap; /* OBS TESTE*/
   /*border: 1px solid #000;
   height: 25px; */
 }
@@ -108,7 +110,9 @@ td, th {
   white-space: normal !important;
   word-break: break-word;
   font-size: 10px;
-  padding: 4px;
+  /*padding: 4px;*/
+  padding: 10px;
+  min-height: 45px;
 }
 tbody tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.03);
@@ -259,7 +263,9 @@ td {
 
 /* CSS do scroll */
 .table-container {
+  width: 100%;
   overflow-x: auto; /*responsavel pelo scroll*/
+  -webkit-overflow-scrolling: touch; /* suaviza no iPhone */
   padding-bottom: 10px;
 }
 
@@ -627,26 +633,3 @@ status de marcar boa, ruin ou melhor*/
   display: none !important;
 }
 
-/*.export-mode #boletimExport {
-  background: #fff !important;
-  color: #000 !important;
-}
-
-.export-mode table {
-  background: #fff !important;
-  color: #000 !important;
-}
-
-.export-mode td,
-.export-mode th {
-  color: #000 !important;
-  background: #fff !important;
-  border-color: #000 !important;
-}*/
-
-/* remove transparência 
-.export-mode {
-  --bg: #ffffff;
-  --text: #000000;
-   
-}*/
