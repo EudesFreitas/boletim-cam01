@@ -557,6 +557,16 @@ status de marcar boa, ruin ou melhor*/
   background: rgba(0,0,0,0.05);
   
 }
+
+.clear-btn {
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: rgba(239, 29, 29, 0.824);
+  color: red;
+}
+
 /* COM A, B, C, D*/
 .grade-btn {
   background: var(--card);

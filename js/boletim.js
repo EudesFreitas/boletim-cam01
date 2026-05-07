@@ -776,28 +776,6 @@ function exportPDF() {
       td.textContent = td.dataset.obs;
     }
   });
-/*async function sharePDF() {
-  const element = document.getElementById("boletimExport");
-
-  const originalWidth = element.style.width;
-  element.style.width = "280mm";
-
-  document.body.classList.add("export-mode");
-
-  await new Promise(r => setTimeout(r, 100)); // 🔥
-
-  const menu = document.getElementById("exportMenu");
-  if (menu) menu.style.display = "none";
-
-  const obsCells = document.querySelectorAll("#tableBody td:nth-child(9)");
-  obsCells.forEach(td => {
-    if (td.dataset.obs) {
-      td.textContent = td.dataset.obs;
-    }
-  // 🔥 ativa modo exportação
-  document.body.classList.add("export-mode");
-  document.getElementById("pdfGrade").textContent = gradeBtn.textContent;
-  }); */
 
 
   const opt = {
@@ -978,4 +956,30 @@ function updateGrade() {
 
   // dentro do updateGrade()
 localStorage.setItem("grade", grade);
+}
+
+//FUNÇÃO PARA LIMPAR SÓ A TABELA
+function clearTable() {
+
+  const confirmar = confirm("Deseja limpar toda a tabela?");
+
+  if (!confirmar) return;
+
+  // limpa tbody
+  tbody.innerHTML = "";
+
+  // recria linhas vazias
+  for (let i = 0; i < 15; i++) {
+    const newRow = createRow();
+    tbody.appendChild(newRow);
+  }
+
+  // limpa somente dados da tabela
+  localStorage.removeItem("boletim");
+
+  // reset contadores
+  clipCounter = 0;
+  takeCounter = 0;
+
+  updateStats();
 }
